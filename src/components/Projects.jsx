@@ -5,6 +5,7 @@ import { Github } from './SocialIcons';
 import { labCaseStudies } from '../data/portfolioData';
 import { sound } from '../utils/sound';
 import Reveal from './motion/Reveal';
+import LivePreviewWindow from './LivePreviewWindow';
 
 const FLOW_FIELDS = [
   { key: 'problem', label: 'Problem' },
@@ -29,19 +30,17 @@ function ReplayWipe() {
   );
 }
 
-function QuickLinks({ study, size = 'sm' }) {
+function QuickLinks({ study, size = 'sm', onOpenPreview }) {
   const pad = size === 'lg' ? 'px-4 py-2 text-xs' : 'px-3 py-1.5 text-[11px]';
   return (
     <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
       {study.demoUrl && (
-        <a
-          href={study.demoUrl}
-          target="_blank"
-          rel="noreferrer"
+        <button
+          onClick={() => { sound.playClick(); onOpenPreview(study); }}
           className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/50 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10 font-mono transition-colors ${pad}`}
         >
           <ExternalLink className="w-3.5 h-3.5" /> Live site
-        </a>
+        </button>
       )}
       {study.githubUrl && (
         <a
@@ -57,7 +56,7 @@ function QuickLinks({ study, size = 'sm' }) {
   );
 }
 
-function CaseStudy({ study, index, isOpen, onToggle }) {
+function CaseStudy({ study, index, isOpen, onToggle, onOpenPreview }) {
   const [replayKey, setReplayKey] = useState(0);
 
   const handleToggle = () => {
@@ -67,9 +66,12 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
 
   return (
     <div className="relative border-b border-[var(--color-line)] py-7 overflow-hidden">
-      <button
+      <div
+        role="button"
+        tabIndex={0}
         onClick={handleToggle}
-        className="w-full flex flex-col sm:flex-row sm:items-start justify-between gap-4 text-left group"
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle(); } }}
+        className="w-full flex flex-col sm:flex-row sm:items-start justify-between gap-4 text-left group cursor-pointer"
         aria-expanded={isOpen}
       >
         <div className="min-w-0">
@@ -88,12 +90,12 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
           <p className="text-sm text-[var(--color-ink-faint)] max-w-2xl">{study.tagline}</p>
         </div>
         <div className="flex items-center gap-3 shrink-0 self-start">
-          {(study.demoUrl || study.githubUrl) && <QuickLinks study={study} />}
+          {(study.demoUrl || study.githubUrl) && <QuickLinks study={study} onOpenPreview={onOpenPreview} />}
           <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className="shrink-0 mt-0.5">
             <ChevronDown className="w-5 h-5 text-[var(--color-ink-faint)]" />
           </motion.div>
         </div>
-      </button>
+      </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -157,6 +159,7 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
 
 export default function Projects() {
   const [openId, setOpenId] = useState(null);
+  const [previewStudy, setPreviewStudy] = useState(null);
 
   const toggle = (id) => {
     sound.playClick();
@@ -180,10 +183,19 @@ export default function Projects() {
 
         <div>
           {labCaseStudies.map((study, index) => (
-            <CaseStudy key={study.id} study={study} index={index} isOpen={openId === study.id} onToggle={() => toggle(study.id)} />
+            <CaseStudy
+              key={study.id}
+              study={study}
+              index={index}
+              isOpen={openId === study.id}
+              onToggle={() => toggle(study.id)}
+              onOpenPreview={setPreviewStudy}
+            />
           ))}
         </div>
       </div>
+
+      <LivePreviewWindow study={previewStudy} onClose={() => setPreviewStudy(null)} />
     </section>
   );
 }
