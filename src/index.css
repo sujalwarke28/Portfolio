@@ -6,6 +6,10 @@
   --color-ink-faint: #6b6862;
   --color-canvas: #0a0a0a;
   --color-canvas-raised: #101112;
+  --color-canvas-hover: #131415;
+  /* Instrument/"screen" tone — canvases, code panels, the terminal, the
+     carousel corkboard. Deliberately NOT themed: lab equipment readouts stay
+     dark regardless of the room's lighting, in both palettes. */
   --color-canvas-deep: #060606;
   --color-accent: #e8672c;
   --color-accent-dim: #b34f21;
@@ -15,11 +19,40 @@
   --color-line: rgba(241, 239, 231, 0.1);
   --color-line-strong: rgba(241, 239, 231, 0.18);
 
+  /* Fixed text colors for use INSIDE always-dark instrument panels
+     (.screen-panel, canvas-deep backdrops) — never themed, since their
+     background never themes either. Using a themed ink-* color on top of
+     canvas-deep would go dark-on-dark in light mode. */
+  --color-instrument-ink: #f1efe7;
+  --color-instrument-ink-dim: #a8a49a;
+  --color-instrument-ink-faint: #6b6862;
+  --color-instrument-line: rgba(241, 239, 231, 0.1);
+  --color-instrument-line-strong: rgba(241, 239, 231, 0.18);
+
   --font-heading: 'Fraunces', 'Georgia', serif;
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   --ease-lab: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light mode — a warm paper tone, not stark white, to stay out of
+   generic-SaaS territory. Instrument tokens (canvas-deep, accent-on-dark)
+   are untouched on purpose. */
+:root[data-theme="light"] {
+  --color-ink: #171510;
+  --color-ink-dim: #5b564c;
+  --color-ink-faint: #8a8477;
+  --color-canvas: #f6f3ec;
+  --color-canvas-raised: #ffffff;
+  --color-canvas-hover: #efeade;
+  --color-accent: #b34f21;
+  --color-accent-dim: #8f3f1a;
+  --color-accent-soft: #d97a44;
+  --color-signal: #4d5b6e;
+  --color-signal-soft: #333f4f;
+  --color-line: rgba(23, 21, 16, 0.1);
+  --color-line-strong: rgba(23, 21, 16, 0.18);
 }
 
 @layer base {
@@ -35,6 +68,7 @@
     font-family: var(--font-sans);
     background-color: var(--color-canvas);
     color: var(--color-ink);
+    transition: background-color 0.3s var(--ease-lab), color 0.3s var(--ease-lab);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -77,6 +111,12 @@
   background-size: 40px 40px;
 }
 
+:root[data-theme="light"] .bg-lab-grid {
+  background-image:
+    linear-gradient(to right, rgba(23, 21, 16, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 21, 16, 0.05) 1px, transparent 1px);
+}
+
 /* Hairline surface — the default card treatment, no blur/glow by default */
 .lab-panel {
   background: var(--color-canvas-raised);
@@ -89,7 +129,7 @@
 
 .lab-panel-hover:hover {
   border-color: var(--color-line-strong);
-  background-color: #131415;
+  background-color: var(--color-canvas-hover);
 }
 
 /* Overlay/modal-only glass treatment */
@@ -98,6 +138,15 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-line-strong);
+}
+
+/* An always-dark instrument surface — canvases, code, terminal, corkboard.
+   Text/borders inside it should use the fixed off-white/accent pair below,
+   not the themed ink tokens, since this panel never goes light. */
+.screen-panel {
+  background: var(--color-canvas-deep);
+  border: 1px solid rgba(241, 239, 231, 0.1);
+  color: #f1efe7;
 }
 
 /* Restrained accent glow — used sparingly for a single focal element per view */

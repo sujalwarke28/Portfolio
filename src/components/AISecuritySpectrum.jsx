@@ -90,8 +90,18 @@ export default function AISecuritySpectrum() {
 
   return (
     <CursorZone type="target">
-    <section id="ai-security" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="ai-security" className="relative py-28 md:py-36 border-t border-[var(--color-line)] overflow-hidden">
+      {/* Chessboard grid — faint, evokes the move-by-move framing */}
+      <div
+        className="absolute inset-0 opacity-[0.035] pointer-events-none"
+        style={{
+          backgroundImage: `repeating-conic-gradient(var(--color-ink) 0% 25%, transparent 0% 50%)`,
+          backgroundSize: '64px 64px',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative max-w-6xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-signal-soft)] mb-4">
             The Endgame
@@ -107,7 +117,7 @@ export default function AISecuritySpectrum() {
         <Reveal>
           <canvas
             ref={canvasRef}
-            className="w-full h-[160px] sm:h-[200px] mb-8"
+            className="w-full h-[160px] sm:h-[200px] mb-8 screen-panel rounded-2xl"
             role="img"
             aria-label="Diagram of particles attempting to cross a permission boundary, blocked unless authorized"
           />

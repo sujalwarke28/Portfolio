@@ -139,8 +139,17 @@ export default function SkillEvolution() {
 
   return (
     <CursorZone type="pen">
-    <section id="evolution" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="evolution" className="relative py-28 md:py-36 border-t border-[var(--color-line)] overflow-hidden">
+      {/* Pitch markings — faint, atmospheric, not a literal diagram */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.05]" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <circle cx="600" cy="400" r="140" fill="none" stroke="var(--color-ink)" strokeWidth="2" />
+        <circle cx="600" cy="400" r="4" fill="var(--color-ink)" />
+        <line x1="600" y1="0" x2="600" y2="800" stroke="var(--color-ink)" strokeWidth="2" />
+        <rect x="-40" y="240" width="220" height="320" fill="none" stroke="var(--color-ink)" strokeWidth="2" />
+        <rect x="1020" y="240" width="220" height="320" fill="none" stroke="var(--color-ink)" strokeWidth="2" />
+      </svg>
+
+      <div className="relative max-w-6xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
             The Formation Board
@@ -157,7 +166,7 @@ export default function SkillEvolution() {
         <Reveal>
           <canvas
             ref={canvasRef}
-            className="w-full h-[220px] sm:h-[280px] mb-8"
+            className="w-full h-[220px] sm:h-[280px] mb-8 screen-panel rounded-2xl"
             role="img"
             aria-label="Diagram of skill nodes connecting across seven learning epochs, illuminated up to the currently selected epoch"
           />

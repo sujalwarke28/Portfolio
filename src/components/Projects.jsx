@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ExternalLink } from 'lucide-react';
+import { ChevronDown, ExternalLink, Star } from 'lucide-react';
 import { Github } from './SocialIcons';
 import { labCaseStudies } from '../data/portfolioData';
 import { sound } from '../utils/sound';
@@ -29,6 +29,34 @@ function ReplayWipe() {
   );
 }
 
+function QuickLinks({ study, size = 'sm' }) {
+  const pad = size === 'lg' ? 'px-4 py-2 text-xs' : 'px-3 py-1.5 text-[11px]';
+  return (
+    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+      {study.demoUrl && (
+        <a
+          href={study.demoUrl}
+          target="_blank"
+          rel="noreferrer"
+          className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/50 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10 font-mono transition-colors ${pad}`}
+        >
+          <ExternalLink className="w-3.5 h-3.5" /> Live site
+        </a>
+      )}
+      {study.githubUrl && (
+        <a
+          href={study.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-line)] text-[var(--color-ink-faint)] hover:text-[var(--color-ink)] hover:border-[var(--color-line-strong)] font-mono transition-colors ${pad}`}
+        >
+          <Github className="w-3.5 h-3.5" /> Source
+        </a>
+      )}
+    </div>
+  );
+}
+
 function CaseStudy({ study, index, isOpen, onToggle }) {
   const [replayKey, setReplayKey] = useState(0);
 
@@ -38,25 +66,33 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
   };
 
   return (
-    <div className="relative border-b border-[var(--color-line)] py-8 overflow-hidden">
+    <div className="relative border-b border-[var(--color-line)] py-7 overflow-hidden">
       <button
         onClick={handleToggle}
-        className="w-full flex items-start justify-between gap-6 text-left group"
+        className="w-full flex flex-col sm:flex-row sm:items-start justify-between gap-4 text-left group"
         aria-expanded={isOpen}
       >
-        <div>
+        <div className="min-w-0">
           <span className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] mb-2">
             <span className="text-[var(--color-accent)] font-bold">{HIGHLIGHT_MINUTE[index % HIGHLIGHT_MINUTE.length]}</span>
             {study.category}
+            {study.featured && (
+              <span className="inline-flex items-center gap-1 text-[var(--color-accent)] border border-[var(--color-accent)]/40 rounded-full px-2 py-0.5 ml-1">
+                <Star className="w-2.5 h-2.5 fill-current" /> Flagship
+              </span>
+            )}
           </span>
           <h3 className="font-heading text-2xl sm:text-3xl text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors mb-2">
             {study.title}
           </h3>
           <p className="text-sm text-[var(--color-ink-faint)] max-w-2xl">{study.tagline}</p>
         </div>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className="shrink-0 mt-2">
-          <ChevronDown className="w-5 h-5 text-[var(--color-ink-faint)]" />
-        </motion.div>
+        <div className="flex items-center gap-3 shrink-0 self-start">
+          {(study.demoUrl || study.githubUrl) && <QuickLinks study={study} />}
+          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className="shrink-0 mt-0.5">
+            <ChevronDown className="w-5 h-5 text-[var(--color-ink-faint)]" />
+          </motion.div>
+        </div>
       </button>
 
       <AnimatePresence initial={false}>
@@ -69,11 +105,11 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <ReplayWipe />
-            <div className="pt-8 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10">
+            <div className="pt-8 grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-x-12 gap-y-8">
               <div>
-                <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed mb-8">{study.summary}</p>
+                <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed mb-8 max-w-2xl">{study.summary}</p>
 
-                <div className="space-y-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 mb-8">
                   {FLOW_FIELDS.map((f) => (
                     <div key={f.key}>
                       <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-1.5">
@@ -84,35 +120,12 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
                   ))}
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-wrap gap-2">
                   {study.highlights.map((h) => (
                     <span key={h} className="text-[10px] font-mono px-2.5 py-1 rounded-full border border-[var(--color-line)] text-[var(--color-ink-faint)]">
                       {h}
                     </span>
                   ))}
-                </div>
-
-                <div className="flex items-center gap-3">
-                  {study.demoUrl && (
-                    <a
-                      href={study.demoUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--color-accent)] hover:underline"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" /> Live demo
-                    </a>
-                  )}
-                  {study.githubUrl && (
-                    <a
-                      href={study.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]"
-                    >
-                      <Github className="w-3.5 h-3.5" /> Source
-                    </a>
-                  )}
                 </div>
               </div>
 
@@ -130,7 +143,7 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
                   Core Pattern
                 </span>
-                <pre className="text-[11px] font-mono text-[var(--color-ink-dim)] p-4 rounded-xl bg-[var(--color-canvas-deep)] border border-[var(--color-line)] overflow-x-auto leading-relaxed">
+                <pre className="text-[11px] font-mono text-[var(--color-instrument-ink-dim)] p-4 rounded-xl bg-[var(--color-canvas-deep)] border border-[var(--color-line)] overflow-x-auto leading-relaxed">
                   {study.codeSnippet}
                 </pre>
               </div>
@@ -143,7 +156,7 @@ function CaseStudy({ study, index, isOpen, onToggle }) {
 }
 
 export default function Projects() {
-  const [openId, setOpenId] = useState(labCaseStudies[0].id);
+  const [openId, setOpenId] = useState(null);
 
   const toggle = (id) => {
     sound.playClick();
@@ -152,7 +165,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
             Match Highlights

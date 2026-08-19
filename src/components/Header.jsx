@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Command, Menu, X, Terminal } from 'lucide-react';
+import { Volume2, VolumeX, Command, Menu, X, Terminal, Sun, Moon } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 const navLinks = [
@@ -13,7 +13,7 @@ const navLinks = [
   { name: 'Contact', href: '#contact' },
 ];
 
-export default function Header({ onOpenCommandPalette, isMuted, setIsMuted, activeSection }) {
+export default function Header({ onOpenCommandPalette, isMuted, setIsMuted, activeSection, theme, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -104,6 +104,15 @@ export default function Header({ onOpenCommandPalette, isMuted, setIsMuted, acti
             title="Terminal"
           >
             <Terminal className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            onClick={() => { sound.playClick(); toggleTheme(); }}
+            className="p-2 rounded-full border border-[var(--color-line)] text-[var(--color-ink-faint)] hover:text-[var(--color-ink)] hover:border-[var(--color-line-strong)] transition-colors"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
           </button>
 
           <button

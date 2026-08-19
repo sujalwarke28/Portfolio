@@ -81,7 +81,7 @@ export default function TerminalShell() {
                       ? 'text-[var(--color-accent)]'
                       : item.type === 'system'
                       ? 'text-[var(--color-signal-soft)]'
-                      : 'text-[var(--color-ink-dim)] whitespace-pre-wrap'
+                      : 'text-[var(--color-instrument-ink-dim)] whitespace-pre-wrap'
                   }
                 >
                   {item.content}
@@ -97,7 +97,7 @@ export default function TerminalShell() {
                   onKeyDown={handleKeyDown}
                   placeholder="type 'help'..."
                   aria-label="Terminal command input"
-                  className="flex-1 bg-transparent border-none outline-none text-[var(--color-ink)] placeholder-[var(--color-ink-faint)] font-mono text-xs"
+                  className="flex-1 bg-transparent border-none outline-none text-[var(--color-instrument-ink)] placeholder-[var(--color-instrument-ink-faint)] font-mono text-xs"
                 />
               </div>
               <div ref={bottomRef} />

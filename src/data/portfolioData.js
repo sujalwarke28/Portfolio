@@ -189,6 +189,54 @@ export const skillStatusMeta = {
 
 export const labCaseStudies = [
   {
+    id: "industrial-predictive-maintenance",
+    featured: true,
+    title: "Titanminds: IoT Factory Management System",
+    category: "IoT & Industrial Intelligent Systems",
+    tagline: "Sensor Telemetry & Machine Failure Prediction",
+    summary: "An industrial IoT platform collecting multi-sensor hardware data (temperature, sound, motion) via ESP32 microcontrollers to move factory maintenance from reactive to predictive.",
+    problem: "Unscheduled factory machine breakdowns mean lost production time and manual inspection overhead that could often be anticipated from sensor trends.",
+    whyItMattered: "This was my first project connecting a physical system to a software/ML pipeline end-to-end — it's where 'intelligent systems' stopped meaning 'a chatbot' and started meaning 'something touching real hardware.'",
+    corePrinciple: "Connect physical hardware sensors to a backend and prediction layer so anomalies are flagged before they become failures, not after.",
+    approach: "Stream sensor readings from ESP32 nodes to a backend ingestion API, persist telemetry, and apply threshold/pattern-based checks that escalate to a maintenance alert.",
+    architecture: [
+      "1. Hardware Sensors → ESP32 Microcontrollers (Temp, Sound, Motion)",
+      "2. Ingestion Gateway → Node.js Express Backend API (Render)",
+      "3. Telemetry Storage → PostgreSQL Database",
+      "4. Predictive Engine → Failure Hazard Scoring",
+      "5. Operator Dashboard → React Interface (Vercel)"
+    ],
+    implementation: "The ingestion endpoint persists every sensor read and runs a lightweight anomaly check inline, dispatching a maintenance alert when temperature or vibration crosses a defined threshold.",
+    challenges: "Getting reliable telemetry off ESP32 hardware over an unstable network was a bigger problem than the prediction logic — retry handling and sane defaults for dropped readings mattered as much as the ML.",
+    result: "A live dashboard and alerting pipeline running end-to-end from sensor to UI.",
+    whatILearned: "Physical systems fail in messier ways than clean datasets suggest — noisy sensor data and network drops are the real engineering problem, not the model.",
+    highlights: [
+      "ESP32 Hardware Telemetry Ingestion",
+      "Live Backend API on Render",
+      "Threshold-Based Maintenance Alerts",
+      "Vercel React Dashboard"
+    ],
+    demoUrl: "https://titanminds.vercel.app/",
+    githubUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
+    codeSnippet: `// Machine Sensor Ingestion & Anomaly Trigger
+export async function handleSensorTelemetry(req, res) {
+  const { machineId, tempC, vibrationIndex, soundDb } = req.body;
+
+  // Persist sensor read
+  await db.query(
+    'INSERT INTO telemetry (machine_id, temp_c, vibration, sound_db, read_at) VALUES ($1, $2, $3, $4, NOW())',
+    [machineId, tempC, vibrationIndex, soundDb]
+  );
+
+  // Failure probability threshold check
+  if (tempC > 85.0 || vibrationIndex > 7.5) {
+    await triggerMaintenanceAlert({ machineId, severity: 'HIGH', cause: 'Thermal/Vibration Anomaly' });
+  }
+
+  res.status(200).json({ status: 'INGESTED' });
+}`
+  },
+  {
     id: "secure-db-copilot",
     title: "Secure Database Copilot",
     category: "AI Systems & Security Case Study",
@@ -278,53 +326,6 @@ export async function queryDocumentCopilot(userQuery, documentId) {
     context: groundedContext,
     prompt: userQuery
   });
-}`
-  },
-  {
-    id: "industrial-predictive-maintenance",
-    title: "Titanminds: IoT Factory Management System",
-    category: "IoT & Industrial Intelligent Systems",
-    tagline: "Sensor Telemetry & Machine Failure Prediction",
-    summary: "An industrial IoT platform collecting multi-sensor hardware data (temperature, sound, motion) via ESP32 microcontrollers to move factory maintenance from reactive to predictive.",
-    problem: "Unscheduled factory machine breakdowns mean lost production time and manual inspection overhead that could often be anticipated from sensor trends.",
-    whyItMattered: "This was my first project connecting a physical system to a software/ML pipeline end-to-end — it's where 'intelligent systems' stopped meaning 'a chatbot' and started meaning 'something touching real hardware.'",
-    corePrinciple: "Connect physical hardware sensors to a backend and prediction layer so anomalies are flagged before they become failures, not after.",
-    approach: "Stream sensor readings from ESP32 nodes to a backend ingestion API, persist telemetry, and apply threshold/pattern-based checks that escalate to a maintenance alert.",
-    architecture: [
-      "1. Hardware Sensors → ESP32 Microcontrollers (Temp, Sound, Motion)",
-      "2. Ingestion Gateway → Node.js Express Backend API (Render)",
-      "3. Telemetry Storage → PostgreSQL Database",
-      "4. Predictive Engine → Failure Hazard Scoring",
-      "5. Operator Dashboard → React Interface (Vercel)"
-    ],
-    implementation: "The ingestion endpoint persists every sensor read and runs a lightweight anomaly check inline, dispatching a maintenance alert when temperature or vibration crosses a defined threshold.",
-    challenges: "Getting reliable telemetry off ESP32 hardware over an unstable network was a bigger problem than the prediction logic — retry handling and sane defaults for dropped readings mattered as much as the ML.",
-    result: "A live dashboard and alerting pipeline running end-to-end from sensor to UI.",
-    whatILearned: "Physical systems fail in messier ways than clean datasets suggest — noisy sensor data and network drops are the real engineering problem, not the model.",
-    highlights: [
-      "ESP32 Hardware Telemetry Ingestion",
-      "Live Backend API on Render",
-      "Threshold-Based Maintenance Alerts",
-      "Vercel React Dashboard"
-    ],
-    demoUrl: "https://titanminds.vercel.app/",
-    githubUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
-    codeSnippet: `// Machine Sensor Ingestion & Anomaly Trigger
-export async function handleSensorTelemetry(req, res) {
-  const { machineId, tempC, vibrationIndex, soundDb } = req.body;
-
-  // Persist sensor read
-  await db.query(
-    'INSERT INTO telemetry (machine_id, temp_c, vibration, sound_db, read_at) VALUES ($1, $2, $3, $4, NOW())',
-    [machineId, tempC, vibrationIndex, soundDb]
-  );
-
-  // Failure probability threshold check
-  if (tempC > 85.0 || vibrationIndex > 7.5) {
-    await triggerMaintenanceAlert({ machineId, severity: 'HIGH', cause: 'Thermal/Vibration Anomaly' });
-  }
-
-  res.status(200).json({ status: 'INGESTED' });
 }`
   },
   {

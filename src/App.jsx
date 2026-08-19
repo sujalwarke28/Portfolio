@@ -16,11 +16,13 @@ import CommandPalette from './components/CommandPalette';
 import Cursor from './components/fx/Cursor';
 import MatchClock from './components/fx/MatchClock';
 import { CursorZoneProvider } from './components/fx/CursorZoneContext';
+import { useTheme } from './hooks/useTheme';
 
 export default function App() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleOpen = () => setCommandPaletteOpen(true);
@@ -52,6 +54,8 @@ export default function App() {
         isMuted={isMuted}
         setIsMuted={setIsMuted}
         activeSection={activeSection}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
 
       <main>
@@ -75,6 +79,8 @@ export default function App() {
         onClose={() => setCommandPaletteOpen(false)}
         isMuted={isMuted}
         setIsMuted={setIsMuted}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
     </div>
     </CursorZoneProvider>

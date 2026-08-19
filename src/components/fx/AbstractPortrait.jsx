@@ -21,12 +21,38 @@ function initialsOf(name) {
 }
 
 /**
- * A generative, non-photographic "portrait" seeded from a name — a small
- * constellation of translucent forms plus initials. Deliberately abstract:
- * no likenesses, no copyrighted character art, just a distinct mark per
- * person that stays consistent across renders.
+ * Faint watermark motifs keyed by source — not likenesses of anyone, just an
+ * abstract visual echo of the world each figure comes from (a chart for
+ * Billions, a spark for Marvel, a key for White Collar...).
  */
-export default function AbstractPortrait({ name, tone = 'accent', size = 120, className = '' }) {
+function Motif({ source }) {
+  switch (source) {
+    case 'Marvel':
+      return <path d="M50 14 L58 42 L82 42 L61 58 L69 86 L50 68 L31 86 L39 58 L18 42 L42 42 Z" />;
+    case 'Suits':
+      return <path d="M50 16 L62 30 L50 50 L38 30 Z M42 50 L58 50 L64 84 L36 84 Z" />;
+    case 'Billions':
+      return <path d="M18 70 L34 52 L46 62 L82 22 M82 22 L64 22 M82 22 L82 40" fill="none" strokeWidth="4" stroke="currentColor" />;
+    case 'Peaky Blinders':
+      return <path d="M14 56 Q50 22 86 56 Q50 44 14 56 Z" />;
+    case 'The Mentalist':
+      return <path d="M12 50 Q50 20 88 50 Q50 80 12 50 Z M50 50 m-13 0 a13 13 0 1 0 26 0 a13 13 0 1 0 -26 0" />;
+    case 'White Collar':
+      return <path d="M34 50 m-18 0 a18 18 0 1 0 36 0 a18 18 0 1 0 -36 0 M52 50 L88 50 M74 50 L74 64 M84 50 L84 60" fill="none" strokeWidth="4" stroke="currentColor" />;
+    case 'Real World':
+      return <path d="M50 12 L58 42 L88 50 L58 58 L50 88 L42 58 L12 50 L42 42 Z" />;
+    default:
+      return null;
+  }
+}
+
+/**
+ * A generative, non-photographic "portrait" seeded from a name — a small
+ * constellation of translucent forms, a faint source-world motif, plus
+ * initials. Deliberately abstract: no likenesses, no copyrighted character
+ * art, just a distinct mark per person that stays consistent across renders.
+ */
+export default function AbstractPortrait({ name, source, tone = 'accent', size = 120, className = '' }) {
   const shapes = useMemo(() => {
     const rand = hashSeed(name);
     const count = 3 + Math.floor(rand() * 2);
@@ -64,6 +90,9 @@ export default function AbstractPortrait({ name, tone = 'accent', size = 120, cl
           transform={`rotate(${s.rotate} ${s.cx} ${s.cy})`}
         />
       ))}
+      <g fill={color} opacity="0.16" color={color}>
+        <Motif source={source} />
+      </g>
       <circle cx="50" cy="50" r="49" fill="none" stroke={color} strokeOpacity="0.35" strokeWidth="1" />
       <text
         x="50"
@@ -72,7 +101,7 @@ export default function AbstractPortrait({ name, tone = 'accent', size = 120, cl
         fontFamily="Fraunces, serif"
         fontStyle="italic"
         fontSize="30"
-        fill="var(--color-ink)"
+        fill="var(--color-instrument-ink)"
         opacity="0.92"
       >
         {initials}

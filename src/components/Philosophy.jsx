@@ -24,12 +24,12 @@ function VaultDoor({ sectionRef }) {
       aria-hidden="true"
     >
       <div className="relative w-64 h-64 sm:w-80 sm:h-80">
-        <div className="absolute inset-0 rounded-full border-2 border-[var(--color-line-strong)] bg-[var(--color-canvas-deep)]" />
-        <div className="absolute inset-4 rounded-full border border-[var(--color-line)]" />
+        <div className="absolute inset-0 rounded-full border-2 border-[var(--color-instrument-line-strong)] bg-[var(--color-canvas-deep)]" />
+        <div className="absolute inset-4 rounded-full border border-[var(--color-instrument-line)]" />
         {Array.from({ length: 12 }).map((_, i) => (
           <span
             key={i}
-            className="absolute w-2 h-2 rounded-full bg-[var(--color-ink-faint)]/40"
+            className="absolute w-2 h-2 rounded-full bg-[var(--color-instrument-ink-faint)]/40"
             style={{
               top: '50%',
               left: '50%',

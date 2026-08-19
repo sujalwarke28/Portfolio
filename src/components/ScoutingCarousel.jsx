@@ -77,7 +77,7 @@ export default function ScoutingCarousel({ figures }) {
         {figures.map((f) => (
           <div key={f.figure} className="flex flex-col items-center text-center gap-2">
             <LiquidGlassPane className="rounded-full overflow-hidden w-20 h-20">
-              <AbstractPortrait name={f.figure} tone={f.tone} size={80} />
+              <AbstractPortrait name={f.figure} source={f.source} tone={f.tone} size={80} />
             </LiquidGlassPane>
             <span className="text-[10px] font-mono text-[var(--color-ink-faint)]">{f.figure}</span>
           </div>
@@ -118,11 +118,12 @@ export default function ScoutingCarousel({ figures }) {
                 }}
               >
                 <LiquidGlassPane className="rounded-2xl overflow-hidden w-[140px] h-[140px] flex items-center justify-center shadow-2xl">
-                  <AbstractPortrait name={f.figure} tone={f.tone} size={110} />
+                  <AbstractPortrait name={f.figure} source={f.source} tone={f.tone} size={110} />
                 </LiquidGlassPane>
                 <div className="mt-3 text-center">
                   <span className="block text-xs font-medium text-[var(--color-ink)]">{f.figure}</span>
-                  <span className="block text-[10px] font-mono text-[var(--color-ink-faint)]">{f.source}</span>
+                  <span className="block text-[10px] font-mono text-[var(--color-ink-faint)] mb-1">{f.source}</span>
+                  <span className="block text-[10px] font-mono text-[var(--color-accent)] leading-snug px-1">{f.principle}</span>
                 </div>
               </div>
             );

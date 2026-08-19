@@ -55,7 +55,7 @@ function TunnelFrame({ depth, progress, total }) {
   return (
     <motion.div
       style={{ scale, opacity }}
-      className="absolute inset-0 m-auto border border-[var(--color-line-strong)] rounded-[2rem]"
+      className="absolute inset-0 m-auto border border-[var(--color-instrument-line-strong)] rounded-[2rem]"
     >
       <div
         className="absolute inset-0 m-auto rounded-[2rem]"
@@ -119,7 +119,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-2.5 mb-8 text-[11px] font-mono text-[var(--color-ink-faint)] tracking-widest uppercase"
+            className="flex items-center gap-2.5 mb-8 text-[11px] font-mono text-[var(--color-instrument-ink-faint)] tracking-widest uppercase"
           >
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-accent)] opacity-60" />
@@ -128,7 +128,7 @@ export default function Hero() {
             <span>{personalInfo.availability}</span>
           </motion.div>
 
-          <h1 className="font-heading font-light text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.02] text-[var(--color-ink)] mb-8 max-w-4xl">
+          <h1 className="font-heading font-light text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.02] text-[var(--color-instrument-ink)] mb-8 max-w-4xl">
             <ScrambleText as="span" text="Building intelligent systems." className="block" />
             <ScrambleText as="span" text="Learning how they work." className="block" />
             <ScrambleText as="span" text="Making them trustworthy." className="block italic text-[var(--color-accent)]" />
@@ -138,7 +138,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[var(--color-ink-dim)] text-base sm:text-lg max-w-xl mb-12 leading-relaxed"
+            className="text-[var(--color-instrument-ink-dim)] text-base sm:text-lg max-w-xl mb-12 leading-relaxed"
           >
             {personalInfo.subtitle}
           </motion.p>
@@ -158,7 +158,7 @@ export default function Hero() {
             </MagneticButton>
             <MagneticButton
               onClick={() => handleNavToSection('projects')}
-              className="px-6 py-3 rounded-full border border-[var(--color-line-strong)] text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:border-[var(--color-ink-faint)] font-medium text-sm transition-colors"
+              className="px-6 py-3 rounded-full border border-[var(--color-instrument-line-strong)] text-[var(--color-instrument-ink-dim)] hover:text-[var(--color-instrument-ink)] hover:border-[var(--color-instrument-ink-faint)] font-medium text-sm transition-colors"
             >
               Review match highlights
             </MagneticButton>
@@ -168,7 +168,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap gap-x-10 gap-y-4 pt-8 border-t border-[var(--color-line)]"
+            className="flex flex-wrap gap-x-10 gap-y-4 pt-8 border-t border-[var(--color-instrument-line)]"
           >
             {[
               { label: 'Academic GPA', value: '9.16 / 10.0' },
@@ -177,17 +177,17 @@ export default function Hero() {
               { label: 'NMIMS Automation Challenge', value: 'Winner' },
             ].map((item) => (
               <div key={item.label} className="flex flex-col">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] mb-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-instrument-ink-faint)] mb-1">
                   {item.label}
                 </span>
-                <span className="text-sm font-medium text-[var(--color-ink)]">{item.value}</span>
+                <span className="text-sm font-medium text-[var(--color-instrument-ink)]">{item.value}</span>
               </div>
             ))}
           </motion.div>
 
           <button
             onClick={() => handleNavToSection('about')}
-            className="mt-10 flex items-center gap-1.5 text-[var(--color-ink-faint)] hover:text-[var(--color-ink)] transition-colors self-start"
+            className="mt-10 flex items-center gap-1.5 text-[var(--color-instrument-ink-faint)] hover:text-[var(--color-instrument-ink)] transition-colors self-start"
             aria-label="Scroll to About section"
           >
             <span className="text-[10px] font-mono uppercase tracking-widest">Enter the tunnel</span>
