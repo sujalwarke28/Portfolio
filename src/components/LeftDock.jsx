@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Compass, GitBranch, Layers, Brain, Users, Mail } from 'lucide-react';
 import { useFinePointer } from '../hooks/useFinePointer';
@@ -28,39 +28,62 @@ function generateSpiralPath(turns = 2.2, cx = 22, cy = 22, startR = 3, endR = 20
 }
 const SPIRAL_PATH = generateSpiralPath();
 
-const INFLUENCE_RADIUS = 90;
-const MAX_SCALE = 1.85;
+// The dock sits on a true semicircle: its flat side against the left edge,
+// bulging out toward the content as you move toward the vertical center —
+// not a straight column.
+const BASE_RADIUS = 108;
+const EXTRA_RADIUS = 56; // how much further out a fully-magnified item pushes, along its own radius
+const CONTAINER_HEIGHT = 2 * BASE_RADIUS + 90;
+const CONTAINER_WIDTH = BASE_RADIUS + EXTRA_RADIUS + 30;
+const INFLUENCE = 130; // px, in real 2D screen distance
+const MAX_SCALE = 1.7;
 
-function DockItem({ item, mouseY, isActive, onNavigate }) {
-  const ref = useRef(null);
+function arcPosition(angleRad, radius) {
+  return {
+    x: radius * Math.cos(angleRad),
+    y: CONTAINER_HEIGHT / 2 + radius * Math.sin(angleRad),
+  };
+}
+
+function useArcLayout() {
+  return useMemo(() => {
+    const n = NAV_ITEMS.length;
+    return NAV_ITEMS.map((item, i) => {
+      const angle = -Math.PI / 2 + (i / (n - 1)) * Math.PI; // -90deg .. +90deg
+      return { ...item, angle, base: arcPosition(angle, BASE_RADIUS) };
+    });
+  }, []);
+}
+
+function DockItem({ item, mouseX, mouseY, isActive, onNavigate, containerLeft, containerTop }) {
+  const distance = useTransform([mouseX, mouseY], ([mx, my]) => {
+    const itemScreenX = containerLeft + item.base.x;
+    const itemScreenY = containerTop + item.base.y;
+    return Math.hypot(mx - itemScreenX, my - itemScreenY);
+  });
+
+  const gRaw = useTransform(distance, [0, INFLUENCE], [1, 0]);
+  const g = useSpring(gRaw, { mass: 0.15, stiffness: 260, damping: 18 });
+  const clampedG = useTransform(g, (v) => Math.min(1, Math.max(0, v)));
+
+  const radius = useTransform(clampedG, (v) => BASE_RADIUS + v * EXTRA_RADIUS);
+  const x = useTransform(radius, (r) => r * Math.cos(item.angle));
+  const y = useTransform(radius, (r) => CONTAINER_HEIGHT / 2 + r * Math.sin(item.angle));
+  const scale = useTransform(clampedG, [0, 1], [1, MAX_SCALE]);
+  const opacity = useTransform(clampedG, [0, 1], [0.35, 1]);
+  const spiralOpacity = useTransform(clampedG, [0, 1], [0.1, 0.75]);
+  const glowShadow = useTransform(clampedG, (v) => `0 0 ${v * 26}px rgba(232, 103, 44, ${v * 0.6})`);
+  const labelOpacity = useTransform(clampedG, [0, 0.55, 1], [0, 0, 1]);
+  const labelX = useTransform(clampedG, [0, 1], [-8, 0]);
+
   const Icon = item.icon;
-
-  const distance = useTransform(mouseY, (val) => {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return Infinity;
-    return val - (rect.top + rect.height / 2);
-  });
-
-  const scaleRaw = useTransform(distance, [-INFLUENCE_RADIUS, 0, INFLUENCE_RADIUS], [1, MAX_SCALE, 1]);
-  const scale = useSpring(scaleRaw, { mass: 0.15, stiffness: 260, damping: 16 });
-  const opacityRaw = useTransform(distance, [-INFLUENCE_RADIUS, 0, INFLUENCE_RADIUS], [0.35, 1, 0.35]);
-  const opacity = useSpring(opacityRaw, { mass: 0.15, stiffness: 260, damping: 16 });
-
-  const spiralOpacity = useTransform(scale, [1, MAX_SCALE], [0.1, 0.75]);
-  const glowShadow = useTransform(scale, (s) => {
-    const g = Math.max(0, (s - 1) / (MAX_SCALE - 1));
-    return `0 0 ${g * 26}px rgba(232, 103, 44, ${g * 0.6})`;
-  });
-  const labelOpacity = useTransform(scale, [1, 1.35, MAX_SCALE], [0, 0, 1]);
-  const labelX = useTransform(scale, [1, MAX_SCALE], [-8, 0]);
 
   return (
     <motion.a
-      ref={ref}
       href={item.href}
       onClick={(e) => { e.preventDefault(); onNavigate(item.href); }}
-      style={{ scale, opacity }}
-      className="relative flex items-center justify-center w-11 h-11 shrink-0"
+      style={{ x, y, scale, opacity, position: 'absolute', top: 0, left: 0 }}
+      className="relative flex items-center justify-center w-11 h-11 -translate-y-1/2"
       aria-label={item.label}
       aria-current={isActive ? 'true' : undefined}
     >
@@ -99,13 +122,14 @@ function DockItem({ item, mouseY, isActive, onNavigate }) {
   );
 }
 
-function PlainDock({ activeSection, onNavigate }) {
+function PlainDock({ items, activeSection, onNavigate }) {
   return (
     <nav
-      className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3"
+      className="fixed left-0 top-1/2 -translate-y-1/2 z-40 hidden lg:block"
+      style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
       aria-label="Section navigation"
     >
-      {NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const Icon = item.icon;
         const isActive = activeSection === item.id;
         return (
@@ -115,6 +139,7 @@ function PlainDock({ activeSection, onNavigate }) {
             onClick={(e) => { e.preventDefault(); onNavigate(item.href); }}
             aria-label={item.label}
             aria-current={isActive ? 'true' : undefined}
+            style={{ position: 'absolute', top: item.base.y, left: item.base.x, transform: 'translateY(-50%)' }}
             className={`flex items-center justify-center w-10 h-10 rounded-xl border transition-colors ${
               isActive
                 ? 'border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-accent)]/10'
@@ -130,30 +155,52 @@ function PlainDock({ activeSection, onNavigate }) {
 }
 
 /**
- * A left-edge dock nav with macOS Dock-style magnification: items are faint
- * and near-resting size until the pointer approaches, then swell with a
- * glow and a spinning spiral flourish, falling off smoothly to neighbors.
- * Falls back to a plain always-visible icon list on touch/reduced-motion —
- * the magnification is pure flourish, never load-bearing for navigation.
+ * A left-edge dock nav arranged on a true semicircle — flush with the edge
+ * at top and bottom, bulging out toward the content at the vertical center.
+ * Hovering doesn't just enlarge an icon in place: it pushes it further out
+ * along its own radius from the arc's center, so the motion traces the same
+ * curve the dock sits on — an orbit, not a straight line. Falls back to a
+ * plain static arc (no hover physics) on touch/reduced-motion.
  */
 export default function LeftDock({ activeSection, onNavigate }) {
   const isFinePointer = useFinePointer();
   const reducedMotion = usePrefersReducedMotion();
-  const mouseY = useMotionValue(Infinity);
+  const items = useArcLayout();
+  const mouseX = useMotionValue(-9999);
+  const mouseY = useMotionValue(-9999);
+  const [viewportHeight, setViewportHeight] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 0));
+
+  useEffect(() => {
+    const handleResize = () => setViewportHeight(window.innerHeight);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const containerTop = (viewportHeight - CONTAINER_HEIGHT) / 2;
 
   if (!isFinePointer || reducedMotion) {
-    return <PlainDock activeSection={activeSection} onNavigate={onNavigate} />;
+    return <PlainDock items={items} activeSection={activeSection} onNavigate={onNavigate} />;
   }
 
   return (
     <nav
-      onMouseMove={(e) => mouseY.set(e.clientY)}
-      onMouseLeave={() => mouseY.set(Infinity)}
-      className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3 py-2"
+      onMouseMove={(e) => { mouseX.set(e.clientX); mouseY.set(e.clientY); }}
+      onMouseLeave={() => { mouseX.set(-9999); mouseY.set(-9999); }}
+      className="fixed left-0 top-1/2 -translate-y-1/2 z-40 hidden lg:block"
+      style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
       aria-label="Section navigation"
     >
-      {NAV_ITEMS.map((item) => (
-        <DockItem key={item.id} item={item} mouseY={mouseY} isActive={activeSection === item.id} onNavigate={onNavigate} />
+      {items.map((item) => (
+        <DockItem
+          key={item.id}
+          item={item}
+          mouseX={mouseX}
+          mouseY={mouseY}
+          isActive={activeSection === item.id}
+          onNavigate={onNavigate}
+          containerLeft={0}
+          containerTop={containerTop}
+        />
       ))}
     </nav>
   );
