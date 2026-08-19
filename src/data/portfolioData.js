@@ -1,26 +1,27 @@
 export const personalInfo = {
   name: "Sujal Pradeep Warke",
   handle: "sujalwarke28",
-  role: "B.Tech Computer Science Engineer | Full-Stack & Machine Learning",
-  tagline: "Building high-performance web applications, Machine Learning models, and industrial IoT management systems.",
-  location: "Thane, Mumbai, Maharashtra, India",
-  status: "Available for Software Engineering Internships & Projects",
-  availability: "🟢 Active for Full-Stack & ML Roles",
-  experienceYears: 1,
+  positioning: "Computer Science Undergraduate building intelligent, secure software systems",
+  tagline: "Building intelligent systems. Learning how they work. Making them trustworthy.",
+  subtitle: "Computer Science undergraduate exploring AI, software engineering, secure systems and research.",
+  location: "Mumbai, Maharashtra, India",
+  status: "Exploring AI Security, RAG Systems & Intelligent Physical Systems",
+  availability: "🟢 Open for Engineering Internships & Research Collaborations",
   gpa: "9.16",
-  commitsThisYear: "3,482",
+  commitsThisYear: "3,482+",
   uptime: "99.99%",
   avgLatency: "14ms",
-  bio: "I aspire to be a successful Engineer doing my Undergraduate at ITM Skills University. My interests include Machine Learning, Deep Learning, Web Development, and Quantum Computing.",
+  bio: "I started by learning how to build software. Then I became fascinated by how software could become intelligent. Now I'm interested in how intelligent systems can become reliable, secure, and useful.",
+  philosophyQuote: "If work is going to consume a significant part of your life, become exceptionally good at something valuable and use that capability to create freedom, independence and a life worth living."
 };
 
 export const resumeData = {
   fullName: "Sujal Pradeep Warke",
-  roleTitle: "B.Tech Computer Science Engineering Student",
+  roleTitle: "Computer Science Undergraduate | AI & Systems Builder",
   phone: "+91 8169613561",
   primaryEmail: "warke.sujal281106@gmail.com",
   eduEmail: "2024.sujalw@isu.ac.in",
-  location: "Thane, Mumbai, Maharashtra, India",
+  location: "Mumbai, Maharashtra, India",
   linkedin: "linkedin.com/in/sujalwarke",
   github: "github.com/sujalwarke28",
   
@@ -78,341 +79,406 @@ export const resumeData = {
   ]
 };
 
-export const metricsHUD = [
-  { label: "Code Commits", value: "3,482+", change: "+18% this month", icon: "GitCommit" },
-  { label: "System Uptime", value: "99.99%", change: "Zero Downtime", icon: "ShieldCheck" },
-  { label: "Avg API Response", value: "14ms", change: "-4ms optimization", icon: "Zap" },
-  { label: "Build Pipeline Speed", value: "42s", change: "Parallelized", icon: "Cpu" },
+export const skillEvolutionEpochs = [
+  {
+    epoch: "01",
+    id: "foundation",
+    title: "FOUNDATION",
+    subtitle: "Core Programming & Algorithmic Thinking",
+    description: "Building mental models for computer science, logic, memory, and structured algorithms.",
+    skills: [
+      { name: "Programming Principles", status: "learned", note: "Control flow, OOP, functional basics" },
+      { name: "Python", status: "learned", note: "Scripting, data structures, automation" },
+      { name: "JavaScript (ESNext)", status: "learned", note: "Async execution, event loop, closure mechanics" },
+      { name: "Dart", status: "learned", note: "Strong static typing & mobile object patterns" },
+      { name: "Data Structures & Algorithms", status: "actively developing", note: "Trees, graphs, dynamic programming, space-time complexity" },
+      { name: "C++", status: "learned", note: "Pointers, memory management, low-level constructs" }
+    ]
+  },
+  {
+    epoch: "02",
+    id: "building",
+    title: "BUILDING",
+    subtitle: "Full-Stack Software Architecture",
+    description: "Designing end-to-end web software systems, API interfaces, and state management.",
+    skills: [
+      { name: "HTML5 & CSS Systems", status: "learned", note: "Responsive layouts, animations, design tokens" },
+      { name: "React 19 & Next.js", status: "learned", note: "Component lifecycle, hooks, Server Components" },
+      { name: "Node.js & Express", status: "learned", note: "RESTful API design, middleware, async event loop" },
+      { name: "MongoDB & Firestore", status: "learned", note: "Document store schema modeling & indexing" },
+      { name: "Firebase & Realtime DB", status: "learned", note: "Authentication & real-time websockets" }
+    ]
+  },
+  {
+    epoch: "03",
+    id: "deployment",
+    title: "DEPLOYMENT",
+    subtitle: "DevOps & Cloud Infrastructure",
+    description: "Transitioning code from local development into production cloud infrastructure.",
+    skills: [
+      { name: "Git & GitHub", status: "learned", note: "Version control, branching, PR review workflows" },
+      { name: "AWS EC2 & GCP", status: "actively developing", note: "Virtual machines, cloud storage, edge functions" },
+      { name: "Vercel, Netlify & Render", status: "learned", note: "Continuous deployment CI/CD integration" },
+      { name: "NeonDB & MongoDB Atlas", status: "learned", note: "Serverless relational DBs & cloud clusters" }
+    ]
+  },
+  {
+    epoch: "04",
+    id: "intelligence",
+    title: "INTELLIGENCE",
+    subtitle: "Machine Learning & Neural Foundations",
+    description: "Moving from deterministic programming to probabilistic learning models.",
+    skills: [
+      { name: "Python ML Ecosystem", status: "learned", note: "NumPy, Pandas, Matplotlib, SciPy" },
+      { name: "Scikit-Learn", status: "learned", note: "Classification, regression, clustering algorithms" },
+      { name: "PyTorch & TensorFlow", status: "actively developing", note: "Deep learning neural network architectures" },
+      { name: "Computer Vision & OCR", status: "actively developing", note: "Image processing, OpenCV, Tesseract text extraction" },
+      { name: "NLP Foundations", status: "actively developing", note: "Tokenization, TF-IDF, word embeddings" }
+    ]
+  },
+  {
+    epoch: "05",
+    id: "generative-ai",
+    title: "GENERATIVE AI",
+    subtitle: "LLMs, Vector Embeddings & RAG",
+    description: "Harnessing large language models, semantic vector search, and tool-calling agents.",
+    skills: [
+      { name: "LLM Integration (Gemini, Llama, OpenAI)", status: "learned", note: "API orchestration, prompt structuring, streaming" },
+      { name: "Vector Embeddings & RAG", status: "actively developing", note: "Cosine similarity, chunking, semantic retrieval" },
+      { name: "Document Intelligence", status: "actively developing", note: "Parsing PDFs, extraction, context grounding" },
+      { name: "Tool Calling & Function Execution", status: "actively developing", note: "Structured JSON schema output & function execution" },
+      { name: "Local Models (Ollama)", status: "exploring", note: "Running quantized LLMs on local hardware" }
+    ]
+  },
+  {
+    epoch: "06",
+    id: "secure-ai",
+    title: "SECURE AI SYSTEMS",
+    subtitle: "Authorization, Guardrails & Trustworthy Architecture",
+    description: "Enforcing security boundaries so AI agents operate safely without exceeding permissions.",
+    skills: [
+      { name: "Role-Based Access Control (RBAC)", status: "actively developing", note: "Project-level authorization & policy enforcement" },
+      { name: "AI Tool Permissions", status: "actively developing", note: "Pre-execution authorization gates for AI agents" },
+      { name: "Human-in-the-loop Gates", status: "actively developing", note: "Required human approval for destructive database actions" },
+      { name: "AI Threat Modeling", status: "exploring", note: "Prompt injection defense, data leakage prevention" },
+      { name: "VAPT Concepts", status: "exploring", note: "Vulnerability assessment & penetration testing fundamentals" }
+    ]
+  },
+  {
+    epoch: "07",
+    id: "research-frontier",
+    title: "RESEARCH / NEXT FRONTIER",
+    subtitle: "Emerging Technical Horizons",
+    description: "Investigating the boundaries of robust AI, explainability, financial ML, and intelligent physical hardware.",
+    skills: [
+      { name: "Robust AI Systems", status: "exploring", note: "Evaluating LLM stability under perturbed inputs" },
+      { name: "Explainable AI (XAI)", status: "exploring", note: "Interpretable model decisions & confidence bounds" },
+      { name: "AI in Financial Systems", status: "exploring", note: "Financial NLP, risk modeling, market sentiment" },
+      { name: "Robotics & IoT Telemetry", status: "exploring", note: "ESP32 sensors, physical automation, predictive maintenance" }
+    ]
+  }
 ];
 
-export const skillCategories = [
+export const labCaseStudies = [
   {
-    id: "languages",
-    name: "Languages & Core",
-    icon: "Code2",
-    color: "#38bdf8",
-    skills: [
-      { name: "TypeScript", level: 96, exp: "4 yrs", mastery: "Expert", description: "Strict typing, generics, AST transformations & full-stack integration", benchmark: "100% Type Safety" },
-      { name: "JavaScript (ESNext)", level: 98, exp: "5 yrs", mastery: "Master", description: "V8 engine mechanics, event loop optimization, async patterns", benchmark: "High Throughput" },
-      { name: "Go (Golang)", level: 88, exp: "2.5 yrs", mastery: "Advanced", description: "Goroutines, channels, gRPC services, microservice architectures", benchmark: "2.1k req/sec" },
-      { name: "Python", level: 90, exp: "4 yrs", mastery: "Advanced", description: "FastAPI, PyTorch model deployment, data processing scripts", benchmark: "Async Engine" },
-      { name: "Rust", level: 78, exp: "1.5 yrs", mastery: "Intermediate", description: "Memory safety, memory borrowing, WebAssembly modules, CLI tools", benchmark: "Zero-Cost Abstractions" },
-      { name: "SQL & Relational", level: 92, exp: "4 yrs", mastery: "Expert", description: "Query indexing, query plan analysis, ACID transactions", benchmark: "Sub-millisecond index hits" },
+    id: "secure-db-copilot",
+    title: "Secure Database Copilot",
+    category: "AI Systems & Security Case Study",
+    tagline: "Enforcing Strict Authorization Guardrails on AI Database Agents",
+    summary: "An AI-powered database copilot designed around a fundamental security principle: The LLM must NEVER be the authorization authority. All tool calls and data requests pass through an immutable RBAC engine prior to SQL execution.",
+    corePrinciple: "The LLM generates requested queries, but an independent authorization layer verifies project boundaries, RBAC permissions, and prompts for explicit human confirmation on destructive operations (DELETE / DROP).",
+    problem: "Generic AI database assistants are vulnerable to cross-project data leakage, prompt injection attacks, and unintended destructive executions when granted direct DB credentials.",
+    architecture: [
+      "1. User Query → Sanitize Input & Extract Metadata",
+      "2. LLM Engine → Generates Candidate SQL & Tool Calling Payload",
+      "3. Policy Guardrail Engine → Validates User RBAC Token & Project Isolation Boundary",
+      "4. Gatekeeper → Requires Explicit Human Confirmation for Mutative Operations",
+      "5. DB Executor → Runs Authorized SQL & Returns Audited Result Stream"
     ],
-  },
-  {
-    id: "frontend",
-    name: "Frontend & UI/UX",
-    icon: "Layout",
-    color: "#a855f7",
-    skills: [
-      { name: "React 19 & Next.js", level: 96, exp: "4 yrs", mastery: "Master", description: "Server Components, hooks, custom state engines, concurrent mode", benchmark: "60 FPS Render" },
-      { name: "HTML5 Canvas & WebGL", level: 86, exp: "2 yrs", mastery: "Advanced", description: "Hardware-accelerated particle physics, shader math, 60fps renders", benchmark: "10k particles @ 60fps" },
-      { name: "CSS Design Systems", level: 95, exp: "5 yrs", mastery: "Master", description: "Modern CSS grid/flexbox, custom animation engines, glassmorphism", benchmark: "Pixel Perfect" },
-      { name: "Tailwind & Utility CSS", level: 94, exp: "3.5 yrs", mastery: "Expert", description: "Component tokens, responsive designs, dark/light themes", benchmark: "Minimal CSS Bundle" },
-      { name: "State Management", level: 92, exp: "4 yrs", mastery: "Expert", description: "Zustand, Redux Toolkit, Context, signals, atomic state", benchmark: "Zero re-render leaks" },
-      { name: "Web Audio API", level: 82, exp: "2 yrs", mastery: "Advanced", description: "Real-time sound synthesis, gain nodes, spatial sound effects", benchmark: "Sub-5ms Audio Latency" },
+    highlights: [
+      "Zero Cross-Project Data Leakage",
+      "Immutable RBAC Pre-Execution Check",
+      "Human-in-the-Loop Destructive Gate",
+      "Full Audit Trail Logging"
     ],
+    codeSnippet: `// Security Guardrail: Pre-Execution Authorization Check
+export async function executeCopilotToolCall(userToken, targetProject, sqlPayload) {
+  // 1. Verify User Session & Project Authorization BEFORE LLM payload runs
+  const authContext = await verifyRBACPermission(userToken, targetProject.id);
+  if (!authContext.hasAccess) {
+    throw new SecurityError('DENIED: User is not authorized for target project');
+  }
+
+  // 2. Inspect query intent for destructive operations
+  const isDestructive = /\\b(DELETE|DROP|TRUNCATE|ALTER)\\b/i.test(sqlPayload);
+  if (isDestructive && !userToken.isConfirmedByHuman) {
+    return { status: 'REQUIRES_HUMAN_APPROVAL', prompt: 'Destructive action detected' };
+  }
+
+  // 3. Execute query within scoped tenant transaction
+  return await db.scopedTransaction(targetProject.id, sqlPayload);
+}`
   },
   {
-    id: "backend",
-    name: "Backend & Systems",
-    icon: "Server",
-    color: "#22c55e",
-    skills: [
-      { name: "Node.js & Express", level: 95, exp: "4.5 yrs", mastery: "Master", description: "Stream processing, cluster mode, event-driven architectures", benchmark: "18k req/sec" },
-      { name: "GraphQL & REST APIs", level: 92, exp: "4 yrs", mastery: "Expert", description: "Schema design, dataloader batching, OpenAPI specifications", benchmark: "N+1 Problem Solved" },
-      { name: "gRPC & Protocol Buffers", level: 84, exp: "2 yrs", mastery: "Advanced", description: "Bi-directional streaming, binary serialization, low payload size", benchmark: "5x smaller than JSON" },
-      { name: "Redis Caching", level: 90, exp: "3 yrs", mastery: "Expert", description: "Pub/Sub streams, memory cache strategies, distributed locks", benchmark: "0.8ms Read Latency" },
-      { name: "PostgreSQL & Prisma", level: 92, exp: "4 yrs", mastery: "Expert", description: "Complex joins, migration pipelines, Connection pooling", benchmark: "P99 < 8ms" },
-      { name: "Kafka & Message Queues", level: 82, exp: "2 yrs", mastery: "Advanced", description: "Event streaming, topic partitions, backpressure handling", benchmark: "50k msg/sec throughput" },
+    id: "document-copilot",
+    title: "Document Copilot",
+    category: "RAG & Document Intelligence",
+    tagline: "High-Precision Semantic Retrieval Over Large Technical Documents",
+    summary: "A document-grounded AI system utilizing smart text chunking, vector embeddings, and semantic retrieval to answer complex queries over dense technical documentation without hallucination.",
+    corePrinciple: "Grounding LLM responses strictly in retrieved vector document chunks with citation pointers, overcoming context window limits and reducing hallucinations.",
+    problem: "Standard LLMs hallucinate when asked detailed questions about specific enterprise documents due to context window limits and lack of domain grounding.",
+    architecture: [
+      "1. Document Ingestion → PDF/Text Extraction & Structural Parsing",
+      "2. Chunking Engine → Overlapping Sliding Window Chunking",
+      "3. Embedding Pipeline → Generates Dense Vector Index",
+      "4. Semantic Query Engine → Vector Similarity Search (Cosine Match)",
+      "5. Prompt Assembler → Inject Grounded Chunks → Stream Verified Answer"
     ],
-  },
-  {
-    id: "cloud",
-    name: "DevOps & Cloud",
-    icon: "Cloud",
-    color: "#f59e0b",
-    skills: [
-      { name: "Docker & Containerization", level: 94, exp: "3.5 yrs", mastery: "Expert", description: "Multi-stage builds, minimal image footprints, layer caching", benchmark: "Alpine 18MB Images" },
-      { name: "Kubernetes & Orchestration", level: 82, exp: "2 yrs", mastery: "Advanced", description: "Deployment specs, ingress controllers, autoscaling HPA", benchmark: "Zero-Downtime Rolling Deploy" },
-      { name: "GitHub Actions CI/CD", level: 95, exp: "3.5 yrs", mastery: "Expert", description: "Automated linting, matrix testing, Docker hub push, deployment triggers", benchmark: "Full CI in < 45s" },
-      { name: "AWS & Cloud Infrastructure", level: 86, exp: "3 yrs", mastery: "Advanced", description: "S3, EC2, Lambda Serverless, CloudFront CDN, IAM security", benchmark: "Multi-Region Edge" },
-      { name: "Terraform & IaC", level: 80, exp: "1.5 yrs", mastery: "Intermediate", description: "Declarative infrastructure, state management, module creation", benchmark: "Repeatable Provisioning" },
-      { name: "Linux Administration", level: 90, exp: "4 yrs", mastery: "Expert", description: "Bash scripting, systemctl, network sockets, SSH hardening", benchmark: "Server Hardened" },
+    highlights: [
+      "Sliding Window Chunking Strategy",
+      "Source Document Citations",
+      "Sub-50ms Vector Similarity Matching",
+      "Hallucination Prevention"
     ],
-  },
-  {
-    id: "ai",
-    name: "AI & Modern Tools",
-    icon: "Cpu",
-    color: "#ec4899",
-    skills: [
-      { name: "LLM Orchestration & OpenAI", level: 88, exp: "2 yrs", mastery: "Advanced", description: "Function calling, prompt engineering, structured JSON outputs", benchmark: "Real-time Stream" },
-      { name: "Vector DBs (Pinecone/Chroma)", level: 85, exp: "1.5 yrs", mastery: "Advanced", description: "Semantic search, RAG pipelines, cosine similarity matching", benchmark: "< 30ms Vector Search" },
-      { name: "Git & Version Control", level: 98, exp: "5 yrs", mastery: "Master", description: "Interactive rebase, cherry-pick, conflict resolution, bisect", benchmark: "Clean Git History" },
-      { name: "Jest / Vitest / Playwright", level: 90, exp: "3.5 yrs", mastery: "Expert", description: "Unit tests, integration pipelines, E2E browser automation", benchmark: "94% Code Coverage" },
-    ],
-  },
-];
-
-export const benchmarkBattles = [
-  {
-    title: "Payload Serialization Speed & Size",
-    candidateA: { name: "JSON over REST", speed: "14.2 ms", size: "2.4 KB", throughput: "4,200 req/s", rating: "Standard" },
-    candidateB: { name: "Protobuf over gRPC", speed: "2.1 ms", size: "0.4 KB", throughput: "19,500 req/s", rating: "Blazing Fast ⚡" },
-    verdict: "Protobuf is ~7x faster with 83% smaller network bandwidth overhead.",
-  },
-  {
-    title: "Database Query Retrieval Strategy",
-    candidateA: { name: "Unindexed Sequential Scan", speed: "240 ms", size: "Full Table Scan", throughput: "45 req/s", rating: "Slow ⚠️" },
-    candidateB: { name: "B-Tree Indexed Lookup + Redis Cache", speed: "0.9 ms", size: "Index Pointer", throughput: "12,000 req/s", rating: "Instant 🚀" },
-    verdict: "Composite indexing + Redis hot cache reduces DB load by 99.6%.",
-  },
-];
-
-export const sprintTasks = [
-  { id: "TASK-101", title: "Migrate Auth Service to Go gRPC for sub-5ms token verification", priority: "HIGH", tag: "Backend", status: "DONE" },
-  { id: "TASK-102", title: "Implement WebGL 60FPS particle galaxy for skill matrix UI", priority: "URGENT", tag: "Frontend", status: "IN_PROGRESS" },
-  { id: "TASK-103", title: "Configure Kubernetes HPA to auto-scale on 80% CPU threshold", priority: "MEDIUM", tag: "DevOps", status: "IN_REVIEW" },
-  { id: "TASK-104", title: "Integrate vector embeddings for AI natural language search", priority: "HIGH", tag: "AI/ML", status: "BACKLOG" },
-  { id: "TASK-105", title: "Setup Prometheus & Grafana alerting metrics dashboard", priority: "MEDIUM", tag: "DevOps", status: "DONE" },
-];
-
-export const ideFiles = [
-  {
-    name: "server.js",
-    language: "javascript",
-    icon: "FileCode",
-    code: `// High-Performance Event-Driven API Server
-import express from 'express';
-import { createClient } from 'redis';
-
-const app = express();
-const redis = createClient({ url: process.env.REDIS_URL });
-
-app.get('/api/v1/health', async (req, res) => {
-  const start = performance.now();
-  const cachedData = await redis.get('system:health');
+    codeSnippet: `// Semantic Retrieval & Grounded Context Assembly
+export async function queryDocumentCopilot(userQuery, documentId) {
+  const queryEmbedding = await generateEmbedding(userQuery);
   
-  if (cachedData) {
-    return res.json({ status: 'OK', cached: true, latencyMs: (performance.now() - start).toFixed(2) });
-  }
+  // Vector search over document chunks
+  const relevantChunks = await vectorStore.query({
+    vector: queryEmbedding,
+    filter: { documentId },
+    topK: 4
+  });
 
-  const payload = { status: 'OK', timestamp: Date.now(), uptime: process.uptime() };
-  await redis.setEx('system:health', 30, JSON.stringify(payload));
-  return res.json({ ...payload, cached: false, latencyMs: (performance.now() - start).toFixed(2) });
-});
+  const groundedContext = relevantChunks.map(c => \`[Page \${c.page}]: \${c.text}\`).join('\\n---\\n');
 
-app.listen(8080, () => console.log('🚀 Server listening on port 8080'));`,
-    output: `[SYSTEM LOG] Server compiled successfully in 12ms.
-[REDIS] Connected to redis://cluster.internal:6379 (Ping: 0.4ms)
-[HTTP] Listening on http://0.0.0.0:8080
-GET /api/v1/health -> 200 OK (Cache HIT: 0.82ms)`
+  return await llmStream({
+    systemPrompt: "Answer strictly using the provided context. If unsure, state 'Not found in document'.",
+    context: groundedContext,
+    prompt: userQuery
+  });
+}`
   },
   {
-    name: "worker.go",
-    language: "go",
-    icon: "FileCode",
-    code: `package main
-
-import (
-	"context"
-	"fmt"
-	"sync"
-	"time"
-)
-
-type Job struct {
-	ID    int
-	Data  string
-}
-
-func Worker(id int, jobs <-chan Job, results chan<- string, wg *sync.WaitGroup) {
-	defer wg.Done()
-	for job := range jobs {
-		time.Sleep(10 * time.Millisecond) // Simulate work
-		results <- fmt.Sprintf("Worker #%d processed Job #%d [%s]", id, job.ID, job.Data)
-	}
-}
-
-func main() {
-	jobs := make(chan Job, 100)
-	results := make(chan string, 100)
-	var wg sync.WaitGroup
-
-	for w := 1; w <= 3; w++ {
-		wg.Add(1)
-		go Worker(w, jobs, results, &wg)
-	}
-
-	for j := 1; j <= 5; j++ {
-		jobs <- Job{ID: j, Data: "Payload stream"}
-	}
-	close(jobs)
-
-	wg.Wait()
-	close(results)
-
-	for res := range results {
-		fmt.Println(res)
-	}
-}`,
-    output: `Worker #1 processed Job #1 [Payload stream]
-Worker #2 processed Job #2 [Payload stream]
-Worker #3 processed Job #3 [Payload stream]
-Worker #1 processed Job #4 [Payload stream]
-Worker #2 processed Job #5 [Payload stream]
-[SUCCESS] 5 goroutines executed concurrently in 20.4ms.`
-  },
-  {
-    name: "pipeline.yml",
-    language: "yaml",
-    icon: "FileText",
-    code: `name: High-Speed Production CI/CD
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js & Go
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Run Automated Unit Tests
-        run: npm test -- --coverage
-
-      - name: Build Docker Container
-        run: docker build -t sujalwarke/api-service:v2.4 .
-
-      - name: Deploy to Kubernetes Cluster
-        run: kubectl rollout restart deployment/api-service-deployment`,
-    output: `[CI/CD Engine] Triggered by push to main.
-✓ Action: Checkout Repository (1.2s)
-✓ Action: Setup Node.js & Go (2.4s)
-✓ Action: Run Automated Unit Tests (14.1s) - 100% Passed
-✓ Action: Build Docker Container (18.6s) - Image size: 24MB
-✓ Action: Deploy to Kubernetes Cluster (4.2s) - Rolling update finished cleanly!
-Status: SUCCESS 🚀`
-  }
-];
-
-export const gitBranchHistory = [
-  { hash: "a9f82d1", msg: "feat(auth): Add zero-trust JWT key rotation mechanism", branch: "main", author: "Sujal Warke", time: "2 hours ago" },
-  { hash: "7c31e4b", msg: "perf(ui): Optimize WebGL renderer to 60fps with frame clamping", branch: "main", author: "Sujal Warke", time: "5 hours ago" },
-  { hash: "b49e102", msg: "ci(github): Parallelize unit test matrix across 4 runners", branch: "feat/ci-speedup", author: "Sujal Warke", time: "1 day ago" },
-  { hash: "5e201a9", msg: "fix(db): Add composite index on (tenant_id, created_at)", branch: "main", author: "Sujal Warke", time: "2 days ago" },
-  { hash: "3d19f8c", msg: "refactor(api): Replace REST endpoint with gRPC bi-directional stream", branch: "main", author: "Sujal Warke", time: "3 days ago" }
-];
-
-export const prReviewSnippet = {
-  title: "PR #142: Low-Latency Redis Pub/Sub Stream Engine",
-  author: "Sujal Warke",
-  status: "APPROVED & MERGED",
-  diff: [
-    { type: "removed", line: 42, text: "-  const result = await db.query('SELECT * FROM audit_logs WHERE user_id = $1', [userId]);" },
-    { type: "added", line: 42, text: "+  const cached = await redis.get(`audit:${userId}`);" },
-    { type: "added", line: 43, text: "+  if (cached) return JSON.parse(cached); // Sub-ms hot path cache hit" },
-    { type: "added", line: 44, text: "+  const result = await db.query('SELECT * FROM audit_logs WHERE user_id = $1', [userId]);" },
-    { type: "added", line: 45, text: "+  await redis.setEx(`audit:${userId}`, 300, JSON.stringify(result.rows));" }
-  ],
-  comments: [
-    { user: "TechLead", avatar: "👨‍💻", comment: "Great change! This drops DB response time from 120ms to 0.9ms on repeated profile reads. Clean code!" }
-  ]
-};
-
-export const cicdPipelineSteps = [
-  { id: 1, name: "Lint & Format", cmd: "eslint --ext .js,.ts src/", duration: "3s", status: "success", detail: "0 errors, 0 warnings found." },
-  { id: 2, name: "Unit & Integration Tests", cmd: "vitest run --coverage", duration: "12s", status: "success", detail: "48/48 tests passed (100% coverage)." },
-  { id: 3, name: "Security Vulnerability Audit", cmd: "trivy image scan", duration: "5s", status: "success", detail: "0 critical CVE vulnerabilities." },
-  { id: 4, name: "Multi-Stage Docker Build", cmd: "docker build --target release", duration: "18s", status: "success", detail: "Built slim container image (24.2 MB)." },
-  { id: 5, name: "Kubernetes Rolling Deploy", cmd: "kubectl apply -f k8s/", duration: "6s", status: "success", detail: "3/3 pods updated with 0 downtime." }
-];
-
-export const systemArchitectureNodes = [
-  { id: "client", label: "Client Browser / App", type: "frontend", icon: "Smartphone", status: "Online", latency: "12ms" },
-  { id: "cdn", label: "Cloudflare Edge CDN", type: "edge", icon: "Globe", status: "Active", latency: "2ms" },
-  { id: "gateway", label: "NGINX API Gateway", type: "gateway", icon: "Shield", status: "Active", latency: "1.4ms" },
-  { id: "auth", label: "Auth Microservice (Go)", type: "service", icon: "Lock", status: "Active", latency: "2.1ms" },
-  { id: "core", label: "Core API Engine (Node/TypeScript)", type: "service", icon: "Cpu", status: "Active", latency: "4.8ms" },
-  { id: "ai", label: "AI Model Engine (Python)", type: "service", icon: "Brain", status: "Active", latency: "18ms" },
-  { id: "redis", label: "Redis In-Memory Cache", type: "db", icon: "Zap", status: "Active", latency: "0.6ms" },
-  { id: "postgres", label: "PostgreSQL Database Cluster", type: "db", icon: "Database", status: "Active", latency: "3.2ms" },
-  { id: "kafka", label: "Kafka Async Event Bus", type: "queue", icon: "Layers", status: "Active", latency: "1.1ms" }
-];
-
-export const incidentDashboardData = {
-  incidentName: "High Memory Warning on Pod #04",
-  status: "RESOLVED AUTOMATICALLY",
-  cpuUsage: "42%",
-  memoryUsage: "68%",
-  errorRate: "0.01%",
-  logs: [
-    { time: "14:22:01", level: "WARN", msg: "Heap memory usage reached 78% on pod-api-7b89" },
-    { time: "14:22:03", level: "INFO", msg: "Triggering garbage collection sweep..." },
-    { time: "14:22:05", level: "ACTION", msg: "HPA spun up duplicate worker node pod-api-7b90" },
-    { time: "14:22:08", level: "SUCCESS", msg: "Traffic balanced. Memory stabilized back to 42%." }
-  ]
-};
-
-export const featuredProjects = [
-  {
-    id: "titanminds-factory",
+    id: "industrial-predictive-maintenance",
     title: "Titanminds: IoT Based Factory Management System",
-    category: "IoT & Industrial Systems",
-    description: "Comprehensive IoT-based industrial factory management system built for real-time telemetry monitoring, machine health sensors, production scheduling, and automated maintenance alert dispatch.",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-    tags: ["IoT Telemetry", "React", "Node.js", "Express", "PostgreSQL", "Tailwind CSS"],
-    metrics: { efficiency: "+34%", uptime: "99.9%", latency: "18ms" },
-    architecture: "IoT Sensors → Express Backend (Render) → PostgreSQL Cluster → React Dashboard",
-    codeSnippet: `// Factory Machine Telemetry & Maintenance Queue Dispatcher
-export async function scheduleMachineMaintenance(machineId, telemetryData) {
-  if (telemetryData.temperature > 85.0 || telemetryData.vibrationIndex > 7.5) {
-    const ticket = await db.query(
-      'INSERT INTO maintenance_tickets (machine_id, status, priority, triggered_at) VALUES ($1, $2, $3, NOW()) RETURNING *',
-      [machineId, 'URGENT', 'CRITICAL']
-    );
-    await dispatchAlertNotification(ticket.rows[0]);
-    return ticket.rows[0];
-  }
-}`,
+    category: "IoT & Industrial Intelligent Systems",
+    tagline: "Real-Time Sensor Ingestion & Machine Failure Prediction Engine",
+    summary: "An industrial IoT telemetry platform collecting multi-sensor hardware data (temperature, sound, vibration) via ESP32 microcontrollers to predict machine failures before downtime occurs.",
+    corePrinciple: "Connecting physical hardware sensors to machine learning models to transition factories from reactive repairs to predictive maintenance.",
+    problem: "Unscheduled factory machine breakdowns cost industrial facilities millions in lost production downtime and manual inspection overhead.",
+    architecture: [
+      "1. Hardware Sensors → ESP32 Microcontrollers (Temp, Sound, Vibration)",
+      "2. Ingestion Gateway → Node.js Express Backend API (Deployed on Render)",
+      "3. Telemetry Storage → PostgreSQL Database Cluster",
+      "4. Predictive Engine → ML Failure Hazard Scoring",
+      "5. Operator Dashboard → React Interface (Deployed on Vercel)"
+    ],
+    highlights: [
+      "ESP32 Hardware Telemetry Ingestion",
+      "Live Render Backend API",
+      "Automated Maintenance Queue Dispatch",
+      "Vercel React Dashboard"
+    ],
     demoUrl: "https://titanminds.vercel.app/",
     githubUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
+    codeSnippet: `// Machine Sensor Ingestion & Anomaly Trigger
+export async function handleSensorTelemetry(req, res) {
+  const { machineId, tempC, vibrationIndex, soundDb } = req.body;
+
+  // Persist sensor read
+  await db.query(
+    'INSERT INTO telemetry (machine_id, temp_c, vibration, sound_db, read_at) VALUES ($1, $2, $3, $4, NOW())',
+    [machineId, tempC, vibrationIndex, soundDb]
+  );
+
+  // Failure probability threshold check
+  if (tempC > 85.0 || vibrationIndex > 7.5) {
+    await triggerMaintenanceAlert({ machineId, severity: 'HIGH', cause: 'Thermal/Vibration Anomaly' });
+  }
+
+  res.status(200).json({ status: 'INGESTED' });
+}`
   },
   {
     id: "reom-co",
     title: "ReOm.Co: Retail Operations Management System",
     category: "Enterprise Retail Operations",
-    description: "All-in-one retail operations management suite streamlining point-of-sale (POS) transactions, multi-store stock synchronization, supplier ordering pipelines, and analytics telemetry.",
-    image: "https://images.unsplash.com/photo-1556742049-0a67e5720f6e?auto=format&fit=crop&w=800&q=80",
-    tags: ["TypeScript", "Next.js", "GraphQL", "Redis", "Prisma ORM", "Docker"],
-    metrics: { posSync: "Sub-second", storeSync: "100%", reqPerSec: "12.4k" },
-    architecture: "Next.js POS App → GraphQL Gateway → Redis Caching Layer → Prisma ORM → PostgreSQL",
-    codeSnippet: `// Multi-Store Inventory Delta Synchronization Handler
+    tagline: "Multi-Store Stock Synchronization & High-Throughput POS Engine",
+    summary: "All-in-one retail operations management suite streamlining point-of-sale (POS) transactions, multi-store inventory delta synchronization, supplier ordering, and analytics telemetry.",
+    corePrinciple: "Decoupling store inventory reads with Redis caching and GraphQL microservices to handle high-frequency retail transaction bursts.",
+    problem: "Multi-branch retail stores suffer from inventory desynchronization and slow POS checkout latency during peak business hours.",
+    architecture: [
+      "1. POS Terminal → Next.js React Frontend",
+      "2. GraphQL Gateway → Query Batching & Schema Federation",
+      "3. Hot Cache → Redis Store Inventory State",
+      "4. ORM Layer → Prisma ORM + PostgreSQL Cluster"
+    ],
+    highlights: [
+      "Sub-Second POS Transaction Sync",
+      "Redis Multi-Store Delta Caching",
+      "GraphQL Batching",
+      "Docker Containerized Deployment"
+    ],
+    githubUrl: "https://github.com/sujalwarke28/ReOm.Co",
+    codeSnippet: `// Multi-Store Inventory Delta Sync Handler
 export async function syncStoreInventoryDelta(storeId, itemSkus) {
   const cacheKey = \`inventory:store:\${storeId}\`;
   const cachedInventory = await redis.get(cacheKey);
-  
+
   if (cachedInventory) {
-    const parsed = JSON.parse(cachedInventory);
-    return calculateInventoryDelta(parsed, itemSkus);
+    return calculateInventoryDelta(JSON.parse(cachedInventory), itemSkus);
   }
 
-  const liveStoreData = await prisma.inventory.findMany({ where: { storeId } });
-  await redis.setex(cacheKey, 60, JSON.stringify(liveStoreData));
-  return liveStoreData;
-}`,
-    demoUrl: "https://github.com/sujalwarke28/ReOm.Co",
-    githubUrl: "https://github.com/sujalwarke28/ReOm.Co",
-  },
+  const liveData = await prisma.inventory.findMany({ where: { storeId } });
+  await redis.setex(cacheKey, 60, JSON.stringify(liveData));
+  return liveData;
+}`
+  }
 ];
+
+export const aiSecuritySpectrum = [
+  { step: "01", title: "AI Generates an Answer", desc: "LLM processes prompt and streams a textual response (e.g. Chatbot Q&A). Risk: Low / Information only.", level: "Low Risk" },
+  { step: "02", title: "AI Uses a Tool", desc: "LLM invokes an external function (e.g. web search, math calculation). Risk: Moderate / External API call.", level: "Moderate" },
+  { step: "03", title: "AI Accesses Data", desc: "LLM retrieves private database records or document RAG chunks. Risk: High / Data Privacy & Leakage.", level: "High Risk" },
+  { step: "04", title: "AI Affects a System", desc: "LLM executes database writes, deletes files, or triggers cloud infrastructure actions. Risk: CRITICAL.", level: "Critical Risk" },
+  { step: "05", title: "THE IMPERATIVE: Authorization & Verification", desc: "AI MUST NEVER be the authorization authority. Independent RBAC rules, strict permission scopes, and human-in-the-loop gates are required.", level: "System Guardrail 🛡️" }
+];
+
+export const researchQuestions = [
+  {
+    id: "q1",
+    question: "How robust are language models when financial information is deliberately perturbed?",
+    area: "Financial AI & Robustness",
+    hypothesis: "Standard LLMs frequently make severe quantitative reasoning errors when numerical digits or financial table structures are subtly perturbed, requiring dedicated structural verification layers."
+  },
+  {
+    id: "q2",
+    question: "How can AI systems explain decisions without creating misleading confidence?",
+    area: "Explainable & Trustworthy AI",
+    hypothesis: "Generating verbal explanations after an answer does not guarantee true reasoning. We need calibrated uncertainty bounds and verifiable evidence pointers."
+  },
+  {
+    id: "q3",
+    question: "How can intelligent systems remain useful while respecting strict access boundaries?",
+    area: "AI Systems & Security",
+    hypothesis: "Pre-execution authorization gates and deterministic policy engines can restrict agent actions without destroying their problem-solving capability."
+  },
+  {
+    id: "q4",
+    question: "How can AI move safely from a chatbot into a system that can interact with real infrastructure?",
+    area: "Intelligent Physical & Cloud Systems",
+    hypothesis: "Bridging AI to real infrastructure requires deterministic state rollback capabilities, isolated sandbox execution, and hardware sensor telemetry loops."
+  }
+];
+
+export const principlesData = [
+  {
+    figure: "Steve Jobs",
+    domain: "Product & Excellence",
+    tenet: "Product Obsession & Relentless Simplicity",
+    application: "Simplicity is the ultimate sophistication. Great software is not just features—it's how deeply you care about the user experience, attention to detail, and challenging conventional thinking."
+  },
+  {
+    figure: "Cristiano Ronaldo",
+    domain: "Discipline & Execution",
+    tenet: "Relentless Pursuit of Self-Improvement",
+    application: "Talent without unshakeable discipline is meaningless. Consistently putting in high-intensity work every single day turns raw potential into world-class performance."
+  },
+  {
+    figure: "Tony Stark (Iron Man)",
+    domain: "Technological Ambition",
+    tenet: "Engineering Imagination & Iterative Building",
+    application: "Don't just talk about technological concepts—build them, test them, break them, and iterate until the impossible becomes functional."
+  },
+  {
+    figure: "Harvey Specter & Mike Ross (Suits)",
+    domain: "Strategy & Mastery",
+    tenet: "Confidence, Learning Velocity & Preparation",
+    application: "Combine high learning velocity with thorough preparation. Know your value, understand the rules of the system, and execute with absolute decisiveness."
+  },
+  {
+    figure: "Patrick Jane (The Mentalist)",
+    domain: "Analysis & Observation",
+    tenet: "Pattern Recognition & Noticing What Others Miss",
+    application: "Deep systems engineering requires acute observation. Look beyond surface-level symptoms to diagnose the underlying structural mechanics."
+  },
+  {
+    figure: "Thomas Shelby (Peaky Blinders)",
+    domain: "Composure & Strategy",
+    tenet: "Calculated Decision-Making Under Pressure",
+    application: "Operate with quiet composure under pressure. Think several moves ahead, manage risk strategically, and keep long-term objectives clear."
+  },
+  {
+    figure: "Xerxes Desai (Titan Story)",
+    domain: "Vision & Longevity",
+    tenet: "Institution Building & Enduring Quality",
+    application: "Focus on long-term value creation. Build systems, projects, and standards that endure beyond immediate short-term trends."
+  }
+];
+
+export const terminalCommands = {
+  help: `SUJAL WARKE DIGITAL LAB TERMINAL (v3.0.0)
+Available Commands:
+  - bio          : Print engineering thesis & profile summary
+  - evolution    : Display the 7 skill evolution epochs
+  - lab          : List deep architectural case studies
+  - research     : Print active research inquiries
+  - principles   : Display core figures & engineering tenets
+  - resume       : Print formal credentials & GPA
+  - contact      : Display direct contact channels
+  - sudo hire    : Trigger fast-track inquiry dialog
+  - clear        : Clear terminal console`,
+
+  bio: `[ENGINEERING THESIS]
+Sujal Pradeep Warke — Computer Science Undergraduate
+Focus: Intelligent Systems, AI Security & Trustworthy Software Architecture
+"I started by learning how to build software. Then I became interested in how software could become intelligent. Now I'm interested in how intelligent systems can become reliable, secure, and useful."`,
+
+  evolution: `[7 SKILL EVOLUTION EPOCHS]
+  01. FOUNDATION        - Python, JS, C++, Data Structures & Algorithms
+  02. BUILDING          - React, Next.js, Node.js, Express, MongoDB, REST
+  03. DEPLOYMENT        - Git, GitHub, AWS, GCP, Vercel, Render, NeonDB
+  04. INTELLIGENCE      - Machine Learning, PyTorch, TensorFlow, Vision, NLP
+  05. GENERATIVE AI     - LLMs, Gemini, Llama, Ollama, RAG, Tool Calling
+  06. SECURE AI SYSTEMS - RBAC, AI Tool Permissions, Human Confirmation Gates
+  07. RESEARCH FRONTIER - Robust AI, Explainable AI, Financial ML, Physical IoT`,
+
+  lab: `[DEEP CASE STUDIES]
+  1. Secure Database Copilot (AI RBAC Guardrails & Authorization Gates)
+  2. Document Copilot (RAG & Semantic Vector Retrieval)
+  3. Titanminds IoT Factory Management (https://titanminds.vercel.app/)
+  4. ReOm.Co Retail Operations Management System`,
+
+  research: `[QUESTIONS I'M CHASING]
+  • How robust are language models when financial information is perturbed?
+  • How can AI systems explain decisions without misleading confidence?
+  • How can intelligent systems remain useful while respecting strict access boundaries?
+  • How can AI move safely from chatbots to real physical infrastructure?`,
+
+  principles: `[INFLUENCES & PRINCIPLES]
+  • Steve Jobs: Product obsession & relentless simplicity
+  • Cristiano Ronaldo: Relentless discipline & daily pursuit of improvement
+  • Tony Stark: Engineering imagination & rapid iteration
+  • Harvey Specter & Mike Ross: Confidence, learning velocity & preparation
+  • Patrick Jane: Acute pattern recognition & deep observation
+  • Thomas Shelby: Calculated strategy & composure under pressure`,
+
+  resume: `[CREDENTIALS SUMMARY]
+  • Degree: B.Tech Computer Science Engineering @ ITM Skills University (GPA: 9.16 / 10.0)
+  • HSC Boards: Electrical Maintenance Topper (200 / 200 Score)
+  • Competition: NMIMS Automation Challenge Winner (Conveyor System Identification)
+  • Experience: Marketing Associate Intern @ LetsUpgrade, Contributor @ GSSoC`,
+
+  contact: `[DIRECT CHANNELS]
+  • Personal Email : warke.sujal281106@gmail.com
+  • University Email: 2024.sujalw@isu.ac.in
+  • Phone          : +91 8169613561
+  • Location       : Mumbai, Maharashtra, India (IST)
+  • GitHub         : https://github.com/sujalwarke28
+  • LinkedIn       : https://linkedin.com/in/sujalwarke`
+};
 
 export const gitContributionData = Array.from({ length: 365 }, (_, i) => {
   const date = new Date();
@@ -429,38 +495,3 @@ export const gitContributionData = Array.from({ length: 365 }, (_, i) => {
     level,
   };
 });
-
-export const terminalCommands = {
-  help: `Available Commands:
-  - skills       : Print full technical skill matrix
-  - projects     : Display key software architecture projects
-  - experience   : View work experience and system achievements
-  - contact      : Show direct contact methods
-  - matrix       : Toggle matrix digital rain effect
-  - sudo hire    : Trigger instant contact highlight popup!
-  - clear        : Clear terminal output
-  - echo [text]  : Echo text to screen`,
-
-  skills: `[SKILL MATRIX SUMMARY]
-  • Languages: TypeScript (96%), JavaScript (98%), Go (88%), Python (90%), Rust (78%), SQL (92%)
-  • Frontend: React 19, Next.js, HTML5 Canvas/WebGL, CSS Tokens, Tailwind, Zustand
-  • Backend: Node.js, Express, Go gRPC, Redis Streams, PostgreSQL, GraphQL, Kafka
-  • DevOps: Docker Containers, Kubernetes K8s, GitHub Actions CI/CD, AWS, Linux Admin`,
-
-  projects: `[FEATURED REPOSITORIES]
-  1. Titanminds Factory Management System (https://github.com/sujalwarke28/Titanminds-Factory-Management-System)
-  2. ReOm.Co: Retail Operations Management System (https://github.com/sujalwarke28/ReOm.Co)`,
-
-  experience: `[EXPERIENCE & IMPACT]
-  • Senior Software Engineer | Distributed Systems & Web (2022 - Present)
-    - Architected microservices serving 1.2M daily active requests with 99.99% SLA.
-    - Reduced API response p99 from 140ms to 14ms using Redis hot caching & gRPC streaming.
-  • Full-Stack Engineer | Cloud Systems (2020 - 2022)
-    - Designed real-time visualizers, CI/CD pipeline automation, and React performance engines.`,
-
-  contact: `[DIRECT CONTACT]
-  • Email: sujalwarke.dev@gmail.com
-  • GitHub: https://github.com/sujalwarke
-  • LinkedIn: https://linkedin.com/in/sujalwarke
-  • Status: 🟢 Open for Lead Software Engineering Roles!`,
-};

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import SkillsGalaxy from './components/SkillsGalaxy';
-import SoftwareGuyLife from './components/SoftwareGuyLife';
-import ResumeSection from './components/ResumeSection';
+import AboutConcept from './components/AboutConcept';
+import SkillEvolution from './components/SkillEvolution';
+import AISecuritySpectrum from './components/AISecuritySpectrum';
 import Projects from './components/Projects';
+import ResearchHub from './components/ResearchHub';
+import PrinciplesMatrix from './components/PrinciplesMatrix';
+import ResumeSection from './components/ResumeSection';
 import GitActivity from './components/GitActivity';
 import TerminalShell from './components/TerminalShell';
 import ProjectEstimator from './components/ProjectEstimator';
@@ -35,7 +38,7 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.25 }
     );
 
     sections.forEach((sec) => observer.observe(sec));
@@ -43,7 +46,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 relative">
+    <div className="min-h-screen bg-[#08090a] text-slate-100 relative">
       
       {/* Top Navbar */}
       <Header 
@@ -53,13 +56,16 @@ export default function App() {
         activeSection={activeSection}
       />
 
-      {/* Main Sections */}
+      {/* Main Narrative & Engineering Lab Sections */}
       <main>
         <Hero />
-        <SkillsGalaxy />
-        <SoftwareGuyLife />
-        <ResumeSection />
+        <AboutConcept />
+        <SkillEvolution />
+        <AISecuritySpectrum />
         <Projects />
+        <ResearchHub />
+        <PrinciplesMatrix />
+        <ResumeSection />
         <GitActivity />
         <TerminalShell />
         <ProjectEstimator />
@@ -69,7 +75,7 @@ export default function App() {
       {/* Footer */}
       <Footer />
 
-      {/* Command Palette Spotlight */}
+      {/* Command Palette Spotlight Launcher */}
       <CommandPalette 
         isOpen={commandPaletteOpen}
         onClose={() => setCommandPaletteOpen(false)}

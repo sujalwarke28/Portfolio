@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Command, Globe, Layers, FolderGit2, Terminal, Mail, Sliders, Volume2, VolumeX, X, FileText } from 'lucide-react';
+import { Search, Command, Globe, Layers, FolderGit2, Terminal, Mail, Sliders, Volume2, VolumeX, X, FileText, Compass, GitBranch, ShieldCheck, Brain, Award } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted }) {
@@ -27,13 +27,16 @@ export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted })
   if (!isOpen) return null;
 
   const actions = [
-    { label: 'Jump to Hero Header', icon: Globe, action: () => scrollToSection('#hero') },
-    { label: 'Jump to Skill Galaxy', icon: Sliders, action: () => scrollToSection('#skills') },
-    { label: 'Jump to Software Guy Workflow', icon: Layers, action: () => scrollToSection('#engineer-life') },
+    { label: 'Jump to Overview Header', icon: Globe, action: () => scrollToSection('#hero') },
+    { label: 'Jump to Engineering Thesis', icon: Compass, action: () => scrollToSection('#about') },
+    { label: 'Jump to 7-Epoch Skill Evolution', icon: GitBranch, action: () => scrollToSection('#evolution') },
+    { label: 'Jump to AI Security Spectrum', icon: ShieldCheck, action: () => scrollToSection('#ai-security') },
+    { label: 'Jump to Deep Case Studies', icon: Layers, action: () => scrollToSection('#projects') },
+    { label: 'Jump to Questions I\'m Chasing', icon: Brain, action: () => scrollToSection('#research') },
+    { label: 'Jump to Principles & Influences', icon: Award, action: () => scrollToSection('#principles') },
     { label: 'Jump to Resume & Credentials', icon: FileText, action: () => scrollToSection('#resume') },
-    { label: 'Jump to Projects Showcase', icon: FolderGit2, action: () => scrollToSection('#projects') },
-    { label: 'Jump to Terminal CLI Shell', icon: Terminal, action: () => scrollToSection('#terminal') },
-    { label: 'Jump to Contact & Hire', icon: Mail, action: () => scrollToSection('#contact') },
+    { label: 'Jump to CLI Terminal Lab', icon: Terminal, action: () => scrollToSection('#terminal') },
+    { label: 'Jump to Direct Contact Channels', icon: Mail, action: () => scrollToSection('#contact') },
     { 
       label: isMuted ? 'Unmute Sound Effects' : 'Mute Sound Effects', 
       icon: isMuted ? VolumeX : Volume2, 
