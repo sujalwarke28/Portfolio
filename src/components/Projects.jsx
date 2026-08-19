@@ -16,16 +16,37 @@ const FLOW_FIELDS = [
   { key: 'whatILearned', label: 'What I Learned' },
 ];
 
-function CaseStudy({ study, isOpen, onToggle }) {
+const HIGHLIGHT_MINUTE = ["12'", "34'", "58'", "76'"];
+
+function ReplayWipe() {
   return (
-    <div className="border-b border-[var(--color-line)] py-8">
+    <motion.div
+      initial={{ x: '-120%' }}
+      animate={{ x: '220%' }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="pointer-events-none absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-[var(--color-accent)]/10 to-transparent z-10"
+    />
+  );
+}
+
+function CaseStudy({ study, index, isOpen, onToggle }) {
+  const [replayKey, setReplayKey] = useState(0);
+
+  const handleToggle = () => {
+    if (!isOpen) setReplayKey((k) => k + 1);
+    onToggle();
+  };
+
+  return (
+    <div className="relative border-b border-[var(--color-line)] py-8 overflow-hidden">
       <button
-        onClick={onToggle}
+        onClick={handleToggle}
         className="w-full flex items-start justify-between gap-6 text-left group"
         aria-expanded={isOpen}
       >
         <div>
-          <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
+          <span className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] mb-2">
+            <span className="text-[var(--color-accent)] font-bold">{HIGHLIGHT_MINUTE[index % HIGHLIGHT_MINUTE.length]}</span>
             {study.category}
           </span>
           <h3 className="font-heading text-2xl sm:text-3xl text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors mb-2">
@@ -41,11 +62,13 @@ function CaseStudy({ study, isOpen, onToggle }) {
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
+            key={replayKey}
             initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
             animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
             exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
+            <ReplayWipe />
             <div className="pt-8 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10">
               <div>
                 <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed mb-8">{study.summary}</p>
@@ -132,19 +155,19 @@ export default function Projects() {
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
-            Lab Case Studies
+            Match Highlights
           </span>
           <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
             Current & significant engineering work.
           </h2>
           <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-8">
-            Problem, approach, architecture, and what actually went wrong — not a feature list.
+            Problem, approach, architecture, and what actually went wrong — not a feature list. Click a highlight to watch the replay.
           </p>
         </Reveal>
 
         <div>
-          {labCaseStudies.map((study) => (
-            <CaseStudy key={study.id} study={study} isOpen={openId === study.id} onToggle={() => toggle(study.id)} />
+          {labCaseStudies.map((study, index) => (
+            <CaseStudy key={study.id} study={study} index={index} isOpen={openId === study.id} onToggle={() => toggle(study.id)} />
           ))}
         </div>
       </div>

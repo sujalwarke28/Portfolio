@@ -1,12 +1,14 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Crown } from 'lucide-react';
 import { aiSecuritySpectrum } from '../data/portfolioData';
 import { sound } from '../utils/sound';
 import { useCanvasScene } from '../hooks/useCanvasScene';
 import Reveal from './motion/Reveal';
+import { CursorZone } from './fx/CursorZoneContext';
 
 const GATE_STEP_IDX = 4; // "Therefore, AI Needs Boundaries"
 const AUTH_STEP_IDX = 5; // "Authorization"
+const CHESS_FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 function createBoundaryScene(ctx, { width, height }, activeStepRef) {
   const gateX = width * 0.62;
@@ -87,17 +89,18 @@ export default function AISecuritySpectrum() {
   const active = aiSecuritySpectrum[activeStepIndex];
 
   return (
+    <CursorZone type="target">
     <section id="ai-security" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-signal-soft)] mb-4">
-            AI Systems & Security
+            The Endgame
           </span>
           <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
             Capability needs a boundary.
           </h2>
           <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-14">
-            Step through what a model can do, and where that stops being safe without deterministic authorization.
+            Eight moves, played out like a game — step through what a model can do, and where that stops being safe without deterministic authorization.
           </p>
         </Reveal>
 
@@ -122,7 +125,7 @@ export default function AISecuritySpectrum() {
                 }`}
               >
                 <span className={`block text-[10px] font-mono ${isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink-faint)]'}`}>
-                  {item.step}
+                  {CHESS_FILES[idx]}1 · move {item.step}
                 </span>
                 <span className={`block text-xs font-medium whitespace-nowrap ${isActive ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink-faint)]'}`}>
                   {item.title}
@@ -133,9 +136,16 @@ export default function AISecuritySpectrum() {
         </div>
 
         <div className="max-w-2xl">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
-            {active.level}
-          </span>
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)]">
+              {active.level}
+            </span>
+            {activeStepIndex === aiSecuritySpectrum.length - 1 && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-widest text-[var(--color-accent)] border border-[var(--color-accent)]/40 rounded-full px-2 py-0.5">
+                <Crown className="w-3 h-3" /> Checkmate
+              </span>
+            )}
+          </div>
           <h3 className="font-heading text-2xl text-[var(--color-ink)] mb-4">{active.title}</h3>
           <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed mb-8">{active.desc}</p>
 
@@ -149,5 +159,6 @@ export default function AISecuritySpectrum() {
         </div>
       </div>
     </section>
+    </CursorZone>
   );
 }

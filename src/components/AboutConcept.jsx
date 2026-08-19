@@ -1,25 +1,26 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Code, Lock, Sparkles } from 'lucide-react';
 import Reveal, { RevealGroup, revealItem } from './motion/Reveal';
-import { motion } from 'framer-motion';
+import TiltCard from './fx/TiltCard';
 
 const phases = [
   {
     mark: '01',
-    label: 'Building Software',
-    quote: '“I started by learning how to build software.”',
+    label: 'Match Report — Building Software',
+    quote: '"I started by learning how to build software."',
     body: 'Understanding computer science foundations, writing clean code, and discovering how frontend clients talk to backend servers and cloud databases — the plumbing that everything else sits on top of.'
   },
   {
     mark: '02',
-    label: 'Discovering Intelligence',
-    quote: '“Then I became fascinated by how software could become intelligent.”',
+    label: 'Match Report — Discovering Intelligence',
+    quote: '"Then I became fascinated by how software could become intelligent."',
     body: 'Exploring machine learning, computer vision, and language models that move software beyond rigid rules into something that adapts to input it has never seen before.'
   },
   {
     mark: '03',
-    label: 'Enforcing Boundaries & Trust',
-    quote: '“Now I’m interested in how intelligent systems can become reliable, secure, and useful.”',
+    label: 'Match Report — Enforcing Boundaries & Trust',
+    quote: '"Now I’m interested in how intelligent systems can become reliable, secure, and useful."',
     body: 'Recognizing that an AI agent without deterministic authorization boundaries can become a liability the moment it can act, not just answer — and building the guardrails that keep capability from becoming risk.'
   }
 ];
@@ -30,13 +31,26 @@ const traits = [
   { title: 'Continuous improvement', desc: 'High learning velocity and a refusal to stay comfortable with "good enough".', icon: Sparkles },
 ];
 
+function StampReveal({ children, delay = 0 }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 1.06, rotate: -1.5 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.45, delay, ease: [0.34, 1.56, 0.64, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function AboutConcept() {
   return (
     <section id="about" className="relative py-28 md:py-36">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
-            Engineering Thesis
+            Player Profile
           </span>
           <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-16 max-w-2xl leading-tight">
             Who Sujal is, told as a trajectory — not a résumé.
@@ -45,13 +59,13 @@ export default function AboutConcept() {
 
         <div className="space-y-16 md:space-y-20">
           {phases.map((phase, idx) => (
-            <Reveal key={phase.mark} delay={idx * 0.05}>
+            <StampReveal key={phase.mark} delay={idx * 0.05}>
               <div className="grid grid-cols-[auto_1fr] gap-6 md:gap-10">
                 <span className="font-heading text-3xl md:text-4xl font-light text-[var(--color-ink-faint)] pt-1">
                   {phase.mark}
                 </span>
                 <div className="border-l border-[var(--color-line)] pl-6 md:pl-10">
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
+                  <span className="inline-block text-[10px] font-mono uppercase tracking-widest text-[var(--color-accent)] border border-[var(--color-accent)]/40 px-2 py-0.5 rounded-sm mb-3 -rotate-1">
                     {phase.label}
                   </span>
                   <p className="font-heading italic text-xl md:text-2xl text-[var(--color-ink)] mb-4 leading-snug">
@@ -62,7 +76,7 @@ export default function AboutConcept() {
                   </p>
                 </div>
               </div>
-            </Reveal>
+            </StampReveal>
           ))}
         </div>
 
@@ -70,10 +84,12 @@ export default function AboutConcept() {
           {traits.map((item) => {
             const Icon = item.icon;
             return (
-              <motion.div key={item.title} variants={revealItem} className="lab-panel lab-panel-hover rounded-2xl p-6">
-                <Icon className="w-4 h-4 text-[var(--color-accent)] mb-4" />
-                <h3 className="text-sm font-medium text-[var(--color-ink)] mb-2">{item.title}</h3>
-                <p className="text-xs text-[var(--color-ink-faint)] leading-relaxed">{item.desc}</p>
+              <motion.div key={item.title} variants={revealItem}>
+                <TiltCard className="lab-panel lab-panel-hover rounded-2xl p-6 h-full">
+                  <Icon className="w-4 h-4 text-[var(--color-accent)] mb-4" />
+                  <h3 className="text-sm font-medium text-[var(--color-ink)] mb-2">{item.title}</h3>
+                  <p className="text-xs text-[var(--color-ink-faint)] leading-relaxed">{item.desc}</p>
+                </TiltCard>
               </motion.div>
             );
           })}

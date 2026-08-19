@@ -61,7 +61,7 @@ export default function TerminalShell() {
         <Reveal>
           <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] mb-6">
             <TerminalIcon className="w-3.5 h-3.5" />
-            <span>A shell, if you'd rather explore that way</span>
+            <span>The war room console, if you'd rather explore that way</span>
           </div>
 
           <div className="rounded-2xl border border-[var(--color-line)] overflow-hidden">

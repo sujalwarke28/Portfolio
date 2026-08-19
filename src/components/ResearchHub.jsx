@@ -4,6 +4,9 @@ import { researchQuestions } from '../data/portfolioData';
 import { sound } from '../utils/sound';
 import { useCanvasScene } from '../hooks/useCanvasScene';
 import Reveal from './motion/Reveal';
+import TiltCard from './fx/TiltCard';
+
+const NOTE_TILT = [-1.5, 1, -0.8, 1.6];
 
 function createKnowledgeMapScene(ctx, { width, height, isCompact }) {
   const count = isCompact ? 16 : 34;
@@ -90,13 +93,13 @@ export default function ResearchHub() {
       <div className="relative max-w-6xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-signal-soft)] mb-4">
-            <Brain className="w-3.5 h-3.5" /> Questions I'm Chasing
+            <Brain className="w-3.5 h-3.5" /> The Locker Room Whiteboard
           </span>
           <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
             I don't have all the answers yet.
           </h2>
           <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-12">
-            Active inquiries, not settled conclusions — framed as working hypotheses I'm testing against my own projects.
+            Notes scrawled between sessions — working hypotheses I'm testing against my own projects, not settled conclusions.
           </p>
         </Reveal>
 
@@ -109,10 +112,17 @@ export default function ResearchHub() {
           className="flex gap-5 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4 focus:outline-none"
         >
           {researchQuestions.map((q, idx) => (
-            <article
+            <TiltCard
               key={q.id}
-              className="snap-start shrink-0 w-[85%] sm:w-[60%] lg:w-[46%] lab-panel rounded-3xl p-8 flex flex-col justify-between"
+              as="article"
+              maxTilt={5}
+              style={{ transform: `rotate(${NOTE_TILT[idx % NOTE_TILT.length]}deg)` }}
+              className="snap-start shrink-0 w-[85%] sm:w-[60%] lg:w-[46%] lab-panel rounded-2xl p-8 flex flex-col justify-between"
             >
+              <span
+                className="absolute -top-2 left-8 w-4 h-4 rounded-full bg-[var(--color-accent)]/70 shadow-[0_2px_6px_rgba(0,0,0,0.5)]"
+                aria-hidden="true"
+              />
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-signal-soft)] px-2.5 py-1 rounded-full border border-[var(--color-line)]">
@@ -130,7 +140,7 @@ export default function ResearchHub() {
                 </span>
                 <p className="text-xs text-[var(--color-ink-dim)] leading-relaxed">{q.hypothesis}</p>
               </div>
-            </article>
+            </TiltCard>
           ))}
         </div>
 

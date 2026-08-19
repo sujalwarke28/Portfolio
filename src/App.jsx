@@ -13,6 +13,9 @@ import TerminalShell from './components/TerminalShell';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CommandPalette from './components/CommandPalette';
+import Cursor from './components/fx/Cursor';
+import MatchClock from './components/fx/MatchClock';
+import { CursorZoneProvider } from './components/fx/CursorZoneContext';
 
 export default function App() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
@@ -40,7 +43,10 @@ export default function App() {
   }, []);
 
   return (
+    <CursorZoneProvider>
     <div className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)] relative">
+      <Cursor />
+      <MatchClock activeSection={activeSection} />
       <Header
         onOpenCommandPalette={() => setCommandPaletteOpen(true)}
         isMuted={isMuted}
@@ -71,5 +77,6 @@ export default function App() {
         setIsMuted={setIsMuted}
       />
     </div>
+    </CursorZoneProvider>
   );
 }

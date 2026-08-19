@@ -32,7 +32,7 @@ export default function Contact() {
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
-            Final Chapter
+            Full Time
           </span>
           <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-xl leading-tight">
             Let's build something worth remembering.

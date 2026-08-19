@@ -95,7 +95,7 @@ export default function ResumeSection() {
                 <FileText className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-heading text-lg text-[var(--color-ink)]">Formal credentials</h3>
+                <h3 className="font-heading text-lg text-[var(--color-ink)]">The player contract</h3>
                 <p className="text-xs text-[var(--color-ink-faint)]">{resumeData.roleTitle}</p>
               </div>
             </div>

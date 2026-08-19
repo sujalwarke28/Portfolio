@@ -4,6 +4,14 @@ import { skillEvolutionEpochs, skillStatusMeta } from '../data/portfolioData';
 import { sound } from '../utils/sound';
 import { useCanvasScene } from '../hooks/useCanvasScene';
 import Reveal from './motion/Reveal';
+import { CursorZone } from './fx/CursorZoneContext';
+
+const RARITY = {
+  'experienced': 'GOLD',
+  'learning': 'SILVER',
+  'exploring': 'BRONZE',
+  'research-interest': 'SCOUTED',
+};
 
 const STATUS_COLOR = {
   'experienced': 'rgba(232, 103, 44, 0.9)',
@@ -130,21 +138,22 @@ export default function SkillEvolution() {
   };
 
   return (
+    <CursorZone type="pen">
     <section id="evolution" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <Reveal>
           <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
-            The Evolution
+            The Formation Board
           </span>
           <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
             How I learned to build.
           </h2>
           <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-14">
-            Seven epochs, tracked honestly — what's genuinely experienced versus what's actively being learned, explored, or simply a research interest.
+            Seven matchdays, tracked honestly — what's genuinely experienced versus what's actively being learned, explored, or simply a research interest. No inflated ratings.
           </p>
         </Reveal>
 
-        {/* Network canvas — grows as epochs are scrubbed */}
+        {/* Network canvas — grows as matchdays are scrubbed */}
         <Reveal>
           <canvas
             ref={canvasRef}
@@ -154,7 +163,7 @@ export default function SkillEvolution() {
           />
         </Reveal>
 
-        {/* Epoch rail */}
+        {/* Matchday rail */}
         <div className="flex items-center gap-1 overflow-x-auto pb-3 mb-10 no-scrollbar border-b border-[var(--color-line)]">
           {skillEvolutionEpochs.map((epoch, idx) => {
             const isActive = activeEpochIndex === idx;
@@ -167,7 +176,7 @@ export default function SkillEvolution() {
                 }`}
               >
                 <span className={`block text-[10px] font-mono ${isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink-faint)]'}`}>
-                  {epoch.epoch}
+                  MATCHDAY {epoch.epoch}
                 </span>
                 <span className={`block text-xs font-medium whitespace-nowrap ${isActive ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink-faint)]'}`}>
                   {epoch.title}
@@ -217,8 +226,13 @@ export default function SkillEvolution() {
                   <span className="block text-xs text-[var(--color-ink-faint)] truncate">{skill.note}</span>
                 </div>
               </div>
-              <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-[var(--color-ink-faint)]">
-                {skillStatusMeta[skill.status].label}
+              <span className="shrink-0 flex items-center gap-2">
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border border-[var(--color-line)] text-[var(--color-ink-faint)]">
+                  {RARITY[skill.status]}
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--color-ink-faint)] hidden sm:inline">
+                  {skillStatusMeta[skill.status].label}
+                </span>
               </span>
             </li>
           ))}
@@ -229,11 +243,12 @@ export default function SkillEvolution() {
             onClick={() => selectEpoch(activeEpochIndex + 1)}
             className="mt-8 inline-flex items-center gap-2 text-xs font-mono text-[var(--color-ink-faint)] hover:text-[var(--color-accent)] transition-colors"
           >
-            <span>Next epoch — {skillEvolutionEpochs[activeEpochIndex + 1].title}</span>
+            <span>Next matchday — {skillEvolutionEpochs[activeEpochIndex + 1].title}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         )}
       </div>
     </section>
+    </CursorZone>
   );
 }
