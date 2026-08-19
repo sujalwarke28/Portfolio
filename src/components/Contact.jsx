@@ -9,11 +9,13 @@ export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const emailAddress = "sujalwarke.dev@gmail.com";
+  const primaryEmail = "warke.sujal281106@gmail.com";
+  const eduEmail = "2024.sujalw@isu.ac.in";
+  const phoneNumber = "+91 8169613561";
 
-  const handleCopyEmail = () => {
+  const handleCopyEmail = (email) => {
     sound.playSuccess();
-    navigator.clipboard.writeText(emailAddress);
+    navigator.clipboard.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -42,7 +44,7 @@ export default function Contact() {
             Get In <span className="text-gradient-cyan">Touch</span>
           </h2>
           <p className="text-slate-400 text-xs sm:text-sm font-mono mt-2">
-            Available for full-time engineering roles, technical advisory, & microservices consulting
+            Available for Software Engineering Internships, Projects & Collaborations
           </p>
         </div>
 
@@ -51,25 +53,25 @@ export default function Contact() {
           {/* Direct Channels */}
           <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 flex flex-col justify-between">
             <div>
-              <h3 className="text-xl font-bold text-white font-heading mb-4">Direct Channels</h3>
+              <h3 className="text-xl font-bold text-white font-heading mb-4">Direct Communication Channels</h3>
               <p className="text-xs text-slate-300 mb-6 leading-relaxed">
-                Whether you have an architectural opportunity, want to talk about high-frequency backend streaming, or hire me for your engineering team, drop a line!
+                Feel free to reach out directly via email, phone, or LinkedIn for project inquiries, technical roles, or open-source collaboration.
               </p>
 
-              {/* Copy Email Box */}
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between mb-6">
+              {/* Copy Primary Email Box */}
+              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-mono text-slate-400 block">Direct Email</span>
-                    <span className="text-xs font-mono text-slate-100 font-bold">{emailAddress}</span>
+                    <span className="text-[10px] font-mono text-slate-400 block">Personal Email</span>
+                    <span className="text-xs font-mono text-slate-100 font-bold">{primaryEmail}</span>
                   </div>
                 </div>
 
                 <button
-                  onClick={handleCopyEmail}
+                  onClick={() => handleCopyEmail(primaryEmail)}
                   onMouseEnter={() => sound.playHover()}
                   className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-cyan-300 border border-slate-700 flex items-center gap-1.5 transition-all"
                 >
@@ -78,15 +80,37 @@ export default function Contact() {
                 </button>
               </div>
 
+              {/* Copy University Email Box */}
+              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-slate-400 block">University Email</span>
+                    <span className="text-xs font-mono text-slate-100 font-bold">{eduEmail}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => handleCopyEmail(eduEmail)}
+                  onMouseEnter={() => sound.playHover()}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-cyan-300 border border-slate-700 flex items-center gap-1.5 transition-all"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </button>
+              </div>
+
               {/* Status SLAs */}
               <div className="space-y-3 font-mono text-xs text-slate-400 mb-8">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-emerald-400" />
-                  <span>Avg SLA Response Time: <strong className="text-slate-200">&lt; 4 Hours</strong></span>
+                  <span>Phone: <strong className="text-slate-200">{phoneNumber}</strong></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-cyan-400" />
-                  <span>Timezone: <strong className="text-slate-200">UTC-7 / PST (Silicon Valley)</strong></span>
+                  <span>Location & Timezone: <strong className="text-slate-200">Mumbai, Maharashtra, India (IST)</strong></span>
                 </div>
               </div>
             </div>
@@ -94,13 +118,13 @@ export default function Contact() {
             {/* Social Links */}
             <div className="flex items-center gap-3 pt-6 border-t border-slate-800">
               <a
-                href="https://github.com/sujalwarke"
+                href="https://github.com/sujalwarke28"
                 target="_blank"
                 rel="noreferrer"
                 onMouseEnter={() => sound.playHover()}
                 className="flex-1 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/40 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all"
               >
-                <Github className="w-4 h-4" /> GitHub
+                <Github className="w-4 h-4" /> GitHub Profile
               </a>
               <a
                 href="https://linkedin.com/in/sujalwarke"
