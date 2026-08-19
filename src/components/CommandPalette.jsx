@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Globe, Layers, Terminal, Mail, Volume2, VolumeX, X, FileText, Compass, GitBranch, ShieldCheck, Brain, Users, Sun, Moon } from 'lucide-react';
+import { Search, Globe, Layers, Terminal, Mail, Volume2, VolumeX, X, FileText, Compass, GitBranch, Brain, Users, Sun, Moon } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted, theme, toggleTheme }) {
@@ -31,7 +31,6 @@ export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted, t
     { label: 'Jump to Engineering Thesis', icon: Compass, action: () => scrollToSection('#about') },
     { label: 'Jump to Skill Evolution', icon: GitBranch, action: () => scrollToSection('#evolution') },
     { label: 'Jump to Lab Case Studies', icon: Layers, action: () => scrollToSection('#projects') },
-    { label: 'Jump to AI Security Spectrum', icon: ShieldCheck, action: () => scrollToSection('#ai-security') },
     { label: "Jump to Questions I'm Chasing", icon: Brain, action: () => scrollToSection('#research') },
     { label: 'Jump to Influences', icon: Users, action: () => scrollToSection('#influences') },
     { label: 'Jump to Résumé & Credentials', icon: FileText, action: () => scrollToSection('#resume') },

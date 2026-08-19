@@ -371,22 +371,6 @@ export async function syncStoreInventoryDelta(storeId, itemSkus) {
   }
 ];
 
-/**
- * The AI capability & authorization spectrum — the exact 8-step progression:
- * generates an answer → uses a tool → accesses data → affects a system →
- * therefore needs boundaries → authorization → verification → trust.
- */
-export const aiSecuritySpectrum = [
-  { step: "01", title: "AI Generates an Answer", desc: "The LLM processes a prompt and streams a textual response — information only, nothing touched.", level: "Low Risk", kind: "capability" },
-  { step: "02", title: "AI Uses a Tool", desc: "The LLM invokes an external function — a search, a calculation, an API call.", level: "Moderate Risk", kind: "capability" },
-  { step: "03", title: "AI Accesses Data", desc: "The LLM retrieves private records or document chunks — now privacy and data leakage are on the table.", level: "High Risk", kind: "capability" },
-  { step: "04", title: "AI Affects a System", desc: "The LLM writes to a database, deletes files, or triggers infrastructure — actions with real consequences.", level: "Critical Risk", kind: "capability" },
-  { step: "05", title: "Therefore, AI Needs Boundaries", desc: "Once a model can act on the world, capability alone is no longer the interesting question — containment is.", level: "Turning Point", kind: "boundary" },
-  { step: "06", title: "Authorization", desc: "Every action is checked against RBAC and project-scoped permissions before it runs — decided outside the model, not inside it.", level: "Guardrail", kind: "boundary" },
-  { step: "07", title: "Verification", desc: "Destructive or high-impact actions require explicit confirmation, and every action leaves an audit trail.", level: "Guardrail", kind: "boundary" },
-  { step: "08", title: "Trust", desc: "Trust is the outcome of the boundary, not a substitute for it — a system earns trust by being provably constrained.", level: "Outcome", kind: "boundary" }
-];
-
 export const researchQuestions = [
   {
     id: "q1",

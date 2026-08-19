@@ -4,7 +4,6 @@ import Hero from './components/Hero';
 import AboutConcept from './components/AboutConcept';
 import SkillEvolution from './components/SkillEvolution';
 import Projects from './components/Projects';
-import AISecuritySpectrum from './components/AISecuritySpectrum';
 import ResearchHub from './components/ResearchHub';
 import Influences from './components/Influences';
 import Philosophy from './components/Philosophy';
@@ -63,7 +62,6 @@ export default function App() {
         <AboutConcept />
         <SkillEvolution />
         <Projects />
-        <AISecuritySpectrum />
         <ResearchHub />
         <Influences />
         <Philosophy />
