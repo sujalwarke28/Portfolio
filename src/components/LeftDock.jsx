@@ -13,67 +13,52 @@ const NAV_ITEMS = [
   { id: 'contact', label: 'Contact', href: '#contact', icon: Mail },
 ];
 
-function generateSpiralPath(turns = 2.2, cx = 22, cy = 22, startR = 3, endR = 20) {
-  const steps = 60;
-  const points = [];
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const angle = t * turns * Math.PI * 2;
-    const r = startR + (endR - startR) * t;
-    const x = cx + r * Math.cos(angle);
-    const y = cy + r * Math.sin(angle);
-    points.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`);
-  }
-  return points.join(' ');
-}
-const SPIRAL_PATH = generateSpiralPath();
-
-// The dock sits on a true semicircle: its flat side against the left edge,
-// bulging out toward the content as you move toward the vertical center —
-// not a straight column.
-const BASE_RADIUS = 108;
-const EXTRA_RADIUS = 56; // how much further out a fully-magnified item pushes, along its own radius
+// At rest the dock is a plain straight column, flush with the edge. Only
+// while the pointer is over it does it bow open into a semicircle — the
+// line and the arc share a vertical center so the morph reads as one shape
+// unfurling, not a jump cut.
+const LINE_PITCH = 56;
+const BASE_RADIUS = 140;
+const EXTRA_RADIUS = 45; // additional radial push for the item nearest the cursor
 const CONTAINER_HEIGHT = 2 * BASE_RADIUS + 90;
 const CONTAINER_WIDTH = BASE_RADIUS + EXTRA_RADIUS + 30;
-const INFLUENCE = 130; // px, in real 2D screen distance
+const INFLUENCE = 130; // px, real 2D screen distance
 const MAX_SCALE = 1.7;
-
-function arcPosition(angleRad, radius) {
-  return {
-    x: radius * Math.cos(angleRad),
-    y: CONTAINER_HEIGHT / 2 + radius * Math.sin(angleRad),
-  };
-}
 
 function useArcLayout() {
   return useMemo(() => {
     const n = NAV_ITEMS.length;
+    const centerIndex = (n - 1) / 2;
     return NAV_ITEMS.map((item, i) => {
       const angle = -Math.PI / 2 + (i / (n - 1)) * Math.PI; // -90deg .. +90deg
-      return { ...item, angle, base: arcPosition(angle, BASE_RADIUS) };
+      const lineY = CONTAINER_HEIGHT / 2 + (i - centerIndex) * LINE_PITCH;
+      return { ...item, angle, lineY };
     });
   }, []);
 }
 
-function DockItem({ item, mouseX, mouseY, isActive, onNavigate, containerLeft, containerTop }) {
+function DockItem({ item, mouseX, mouseY, dockOpen, isActive, onNavigate, containerTop }) {
   const distance = useTransform([mouseX, mouseY], ([mx, my]) => {
-    const itemScreenX = containerLeft + item.base.x;
-    const itemScreenY = containerTop + item.base.y;
-    return Math.hypot(mx - itemScreenX, my - itemScreenY);
+    const arcX = BASE_RADIUS * Math.cos(item.angle);
+    const arcY = CONTAINER_HEIGHT / 2 + BASE_RADIUS * Math.sin(item.angle);
+    return Math.hypot(mx - arcX, my - (containerTop + arcY));
   });
 
   const gRaw = useTransform(distance, [0, INFLUENCE], [1, 0]);
   const g = useSpring(gRaw, { mass: 0.15, stiffness: 260, damping: 18 });
   const clampedG = useTransform(g, (v) => Math.min(1, Math.max(0, v)));
 
-  const radius = useTransform(clampedG, (v) => BASE_RADIUS + v * EXTRA_RADIUS);
-  const x = useTransform(radius, (r) => r * Math.cos(item.angle));
-  const y = useTransform(radius, (r) => CONTAINER_HEIGHT / 2 + r * Math.sin(item.angle));
+  const totalRadius = useTransform([dockOpen, clampedG], ([open, mag]) => open * (BASE_RADIUS + mag * EXTRA_RADIUS));
+  const x = useTransform(totalRadius, (r) => r * Math.cos(item.angle));
+  const y = useTransform([dockOpen, totalRadius], ([open, r]) => {
+    const arcY = CONTAINER_HEIGHT / 2 + r * Math.sin(item.angle);
+    return item.lineY + (arcY - item.lineY) * open;
+  });
+
   const scale = useTransform(clampedG, [0, 1], [1, MAX_SCALE]);
   const opacity = useTransform(clampedG, [0, 1], [0.35, 1]);
-  const spiralOpacity = useTransform(clampedG, [0, 1], [0.1, 0.75]);
   const glowShadow = useTransform(clampedG, (v) => `0 0 ${v * 26}px rgba(232, 103, 44, ${v * 0.6})`);
-  const labelOpacity = useTransform(clampedG, [0, 0.55, 1], [0, 0, 1]);
+  const labelOpacity = useTransform([dockOpen, clampedG], ([open, mag]) => open * Math.max(0, Math.min(1, (mag - 0.55) / 0.45)));
   const labelX = useTransform(clampedG, [0, 1], [-8, 0]);
 
   const Icon = item.icon;
@@ -87,15 +72,6 @@ function DockItem({ item, mouseX, mouseY, isActive, onNavigate, containerLeft, c
       aria-label={item.label}
       aria-current={isActive ? 'true' : undefined}
     >
-      <motion.svg
-        className="absolute inset-0 pointer-events-none dock-spiral"
-        style={{ opacity: spiralOpacity }}
-        viewBox="0 0 44 44"
-        aria-hidden="true"
-      >
-        <path d={SPIRAL_PATH} stroke="var(--color-accent)" strokeWidth="1" fill="none" />
-      </motion.svg>
-
       <motion.div
         className="absolute inset-0 rounded-2xl pointer-events-none"
         style={{ boxShadow: glowShadow }}
@@ -139,7 +115,7 @@ function PlainDock({ items, activeSection, onNavigate }) {
             onClick={(e) => { e.preventDefault(); onNavigate(item.href); }}
             aria-label={item.label}
             aria-current={isActive ? 'true' : undefined}
-            style={{ position: 'absolute', top: item.base.y, left: item.base.x, transform: 'translateY(-50%)' }}
+            style={{ position: 'absolute', top: item.lineY, left: 0, transform: 'translateY(-50%)' }}
             className={`flex items-center justify-center w-10 h-10 rounded-xl border transition-colors ${
               isActive
                 ? 'border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-accent)]/10'
@@ -155,12 +131,11 @@ function PlainDock({ items, activeSection, onNavigate }) {
 }
 
 /**
- * A left-edge dock nav arranged on a true semicircle — flush with the edge
- * at top and bottom, bulging out toward the content at the vertical center.
- * Hovering doesn't just enlarge an icon in place: it pushes it further out
- * along its own radius from the arc's center, so the motion traces the same
- * curve the dock sits on — an orbit, not a straight line. Falls back to a
- * plain static arc (no hover physics) on touch/reduced-motion.
+ * A left-edge dock nav: a plain, faint, straight column at rest. Only while
+ * the pointer is over the dock does it bow open into a semicircle, and
+ * hovering an individual icon pushes it further out along its own radius
+ * from that arc's center — an orbit, not a straight enlarge. Falls back to
+ * a plain static column (no hover physics) on touch/reduced-motion.
  */
 export default function LeftDock({ activeSection, onNavigate }) {
   const isFinePointer = useFinePointer();
@@ -168,6 +143,8 @@ export default function LeftDock({ activeSection, onNavigate }) {
   const items = useArcLayout();
   const mouseX = useMotionValue(-9999);
   const mouseY = useMotionValue(-9999);
+  const dockOpenTarget = useMotionValue(0);
+  const dockOpen = useSpring(dockOpenTarget, { mass: 0.3, stiffness: 200, damping: 26 });
   const [viewportHeight, setViewportHeight] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 0));
 
   useEffect(() => {
@@ -184,8 +161,9 @@ export default function LeftDock({ activeSection, onNavigate }) {
 
   return (
     <nav
+      onMouseEnter={() => dockOpenTarget.set(1)}
       onMouseMove={(e) => { mouseX.set(e.clientX); mouseY.set(e.clientY); }}
-      onMouseLeave={() => { mouseX.set(-9999); mouseY.set(-9999); }}
+      onMouseLeave={() => { dockOpenTarget.set(0); mouseX.set(-9999); mouseY.set(-9999); }}
       className="fixed left-0 top-1/2 -translate-y-1/2 z-40 hidden lg:block"
       style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
       aria-label="Section navigation"
@@ -196,9 +174,9 @@ export default function LeftDock({ activeSection, onNavigate }) {
           item={item}
           mouseX={mouseX}
           mouseY={mouseY}
+          dockOpen={dockOpen}
           isActive={activeSection === item.id}
           onNavigate={onNavigate}
-          containerLeft={0}
           containerTop={containerTop}
         />
       ))}

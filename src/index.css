@@ -189,15 +189,6 @@
   background: #3a3a3a;
 }
 
-/* Slow ambient spin for the dock's spiral flourish */
-@keyframes dock-spiral-spin {
-  to { transform: rotate(360deg); }
-}
-.dock-spiral {
-  animation: dock-spiral-spin 22s linear infinite;
-  transform-origin: center;
-}
-
 /* No Scrollbar Utility */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
