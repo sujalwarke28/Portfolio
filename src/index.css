@@ -1,16 +1,40 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ink: #f1efe7;
+  --color-ink-dim: #a8a49a;
+  --color-ink-faint: #6b6862;
+  --color-canvas: #0a0a0a;
+  --color-canvas-raised: #101112;
+  --color-canvas-deep: #060606;
+  --color-accent: #e8672c;
+  --color-accent-dim: #b34f21;
+  --color-accent-soft: #f0985f;
+  --color-signal: #647184;
+  --color-signal-soft: #8b96a6;
+  --color-line: rgba(241, 239, 231, 0.1);
+  --color-line-strong: rgba(241, 239, 231, 0.18);
+
+  --font-heading: 'Fraunces', 'Georgia', serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --ease-lab: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 @layer base {
-  :root {
-    --font-heading: 'Outfit', sans-serif;
-    --font-sans: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #08090a;
-    color: #f3f4f6;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -20,85 +44,80 @@
   code, pre, .font-mono {
     font-family: var(--font-mono);
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Clears the fixed floating header when jumping to a section via nav,
+     command palette, or a direct #hash URL. */
+  section[id] {
+    scroll-margin-top: 6rem;
+  }
 }
 
-/* Technical Grid Overlay */
-.bg-cyber-grid {
-  background-image: 
-    linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
+/* Technical Blueprint Grid Overlay */
+.bg-lab-grid {
+  background-image:
+    linear-gradient(to right, rgba(241, 239, 231, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(241, 239, 231, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* Glassmorphism Panels */
-.glass-panel {
-  background: rgba(13, 14, 18, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
+/* Hairline surface — the default card treatment, no blur/glow by default */
+.lab-panel {
+  background: var(--color-canvas-raised);
+  border: 1px solid var(--color-line);
 }
 
-.glass-panel-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.lab-panel-hover {
+  transition: border-color 0.4s var(--ease-lab), background-color 0.4s var(--ease-lab);
 }
 
-.glass-panel-hover:hover {
-  background: rgba(18, 20, 26, 0.85);
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 14px 48px 0 rgba(56, 189, 248, 0.12);
-  transform: translateY(-2px);
+.lab-panel-hover:hover {
+  border-color: var(--color-line-strong);
+  background-color: #131415;
 }
 
-/* Glowing Neon Accents */
-.glow-cyan {
-  box-shadow: 0 0 24px rgba(56, 189, 248, 0.25);
+/* Overlay/modal-only glass treatment */
+.glass-overlay {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-line-strong);
 }
 
-.glow-purple {
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.25);
+/* Restrained accent glow — used sparingly for a single focal element per view */
+.glow-accent {
+  box-shadow: 0 0 32px -8px rgba(232, 103, 44, 0.35);
 }
 
-.glow-green {
-  box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+.glow-signal {
+  box-shadow: 0 0 32px -8px rgba(100, 113, 132, 0.3);
 }
 
-/* Refrained Text Gradients */
-.text-gradient-cyan {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 60%, #c084fc 100%);
+/* Serif display gradient — used once per section, not on every heading */
+.text-ink-fade {
+  background: linear-gradient(180deg, var(--color-ink) 0%, var(--color-ink-dim) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-green {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 60%, #06b6d4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-purple {
-  background: linear-gradient(135deg, #c084fc 0%, #a855f7 60%, #818cf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Keyframe Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
-  50% { opacity: 0.9; filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.8)); }
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 3s ease-in-out infinite;
+.text-accent-line {
+  color: var(--color-accent);
 }
 
 /* Scrollbar Customization */
@@ -108,17 +127,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #08090a;
+  background: var(--color-canvas);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #2a2a2a;
   border-radius: 4px;
-  border: 1px solid rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(232, 103, 44, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #3a3a3a;
 }
 
 /* No Scrollbar Utility */

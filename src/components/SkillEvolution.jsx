@@ -1,144 +1,238 @@
-import React, { useState } from 'react';
-import { GitBranch, CheckCircle2, RefreshCw, Compass, Sparkles, Filter, ChevronRight, Layers } from 'lucide-react';
-import { skillEvolutionEpochs } from '../data/portfolioData';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { skillEvolutionEpochs, skillStatusMeta } from '../data/portfolioData';
 import { sound } from '../utils/sound';
+import { useCanvasScene } from '../hooks/useCanvasScene';
+import Reveal from './motion/Reveal';
+
+const STATUS_COLOR = {
+  'experienced': 'rgba(232, 103, 44, 0.9)',
+  'learning': 'rgba(232, 103, 44, 0.5)',
+  'exploring': 'rgba(139, 150, 166, 0.75)',
+  'research-interest': 'rgba(241, 239, 231, 0.28)'
+};
+
+function buildNetworkLayout(width, height, isCompact) {
+  const margin = isCompact ? 30 : 70;
+  const colWidth = (width - margin * 2) / (skillEvolutionEpochs.length - 1);
+  const nodes = [];
+
+  skillEvolutionEpochs.forEach((epoch, epochIdx) => {
+    const x = margin + colWidth * epochIdx;
+    const count = epoch.skills.length;
+    epoch.skills.forEach((skill, sIdx) => {
+      const spread = Math.min(height - 40, count * (isCompact ? 26 : 34));
+      const y = height / 2 - spread / 2 + (spread / Math.max(count - 1, 1)) * sIdx + (Math.random() - 0.5) * 8;
+      nodes.push({
+        x, y,
+        epochIdx,
+        status: skill.status,
+        baseY: y,
+        phase: Math.random() * Math.PI * 2,
+      });
+    });
+  });
+
+  // connect each node to the nearest node in the previous column
+  const edges = [];
+  for (let i = 1; i < skillEvolutionEpochs.length; i++) {
+    const prevCol = nodes.filter((n) => n.epochIdx === i - 1);
+    const col = nodes.filter((n) => n.epochIdx === i);
+    col.forEach((node) => {
+      let nearest = prevCol[0];
+      let best = Infinity;
+      prevCol.forEach((p) => {
+        const d = Math.abs(p.y - node.y);
+        if (d < best) { best = d; nearest = p; }
+      });
+      if (nearest) edges.push([nearest, node]);
+    });
+  }
+
+  return { nodes, edges };
+}
+
+function createEvolutionScene(ctx, { width, height, isCompact }, activeEpochRef) {
+  const { nodes, edges } = buildNetworkLayout(width, height, isCompact);
+
+  return {
+    render(_mouse, t) {
+      ctx.clearRect(0, 0, width, height);
+      const activeIdx = activeEpochRef.current;
+
+      edges.forEach(([a, b]) => {
+        const litA = a.epochIdx <= activeIdx;
+        const litB = b.epochIdx <= activeIdx;
+        if (!litA || !litB) {
+          ctx.strokeStyle = 'rgba(241, 239, 231, 0.04)';
+        } else {
+          ctx.strokeStyle = 'rgba(232, 103, 44, 0.18)';
+        }
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      });
+
+      nodes.forEach((node) => {
+        const lit = node.epochIdx <= activeIdx;
+        const isCurrent = node.epochIdx === activeIdx;
+        const bob = Math.sin(t / 900 + node.phase) * (lit ? 2 : 0);
+        const r = isCurrent ? 3.4 : 2.4;
+        ctx.beginPath();
+        ctx.arc(node.x, node.baseY + bob, r, 0, Math.PI * 2);
+        ctx.fillStyle = lit ? STATUS_COLOR[node.status] : 'rgba(241, 239, 231, 0.06)';
+        ctx.fill();
+        if (isCurrent) {
+          ctx.beginPath();
+          ctx.arc(node.x, node.baseY + bob, r + 5, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(232, 103, 44, 0.25)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      });
+    },
+    destroy() {}
+  };
+}
+
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'experienced', label: 'Experienced' },
+  { id: 'learning', label: 'Learning' },
+  { id: 'exploring', label: 'Exploring' },
+  { id: 'research-interest', label: 'Research Interest' },
+];
 
 export default function SkillEvolution() {
   const [activeEpochIndex, setActiveEpochIndex] = useState(0);
-  const [filterStatus, setFilterStatus] = useState('all'); // 'all' | 'learned' | 'actively developing' | 'exploring'
+  const [filterStatus, setFilterStatus] = useState('all');
+  const canvasRef = useRef(null);
+  const activeEpochRef = useRef(0);
+
+  useEffect(() => { activeEpochRef.current = activeEpochIndex; }, [activeEpochIndex]);
+
+  const sceneFactory = useCallback(
+    (ctx, meta) => createEvolutionScene(ctx, meta, activeEpochRef),
+    []
+  );
+  useCanvasScene(canvasRef, sceneFactory);
 
   const activeEpoch = skillEvolutionEpochs[activeEpochIndex];
-
   const filteredSkills = filterStatus === 'all'
     ? activeEpoch.skills
-    : activeEpoch.skills.filter(s => s.status.toLowerCase() === filterStatus);
+    : activeEpoch.skills.filter((s) => s.status === filterStatus);
+
+  const selectEpoch = (idx) => {
+    sound.playClick();
+    setActiveEpochIndex(idx);
+  };
 
   return (
-    <section id="evolution" className="relative py-24 bg-[#050608] overflow-hidden border-t border-slate-800/80">
-      
-      {/* Glow Atmosphere */}
-      <div className="absolute top-1/3 right-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[160px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono mb-4">
-            <GitBranch className="w-3.5 h-3.5" />
-            <span>INTERACTIVE ENGINEERING TIMELINE</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 font-heading">
-            Skill Evolution <span className="text-gradient-cyan">& Capabilities</span>
+    <section id="evolution" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <Reveal>
+          <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
+            The Evolution
+          </span>
+          <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
+            How I learned to build.
           </h2>
-          <p className="text-slate-300 text-xs sm:text-sm font-mono">
-            Tracking progressive growth across 7 distinct technical epochs — clearly distinguishing learned tools, active development, and research exploration.
+          <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-14">
+            Seven epochs, tracked honestly — what's genuinely experienced versus what's actively being learned, explored, or simply a research interest.
           </p>
-        </div>
+        </Reveal>
 
-        {/* Epoch Selector Buttons */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+        {/* Network canvas — grows as epochs are scrubbed */}
+        <Reveal>
+          <canvas
+            ref={canvasRef}
+            className="w-full h-[220px] sm:h-[280px] mb-8"
+            role="img"
+            aria-label="Diagram of skill nodes connecting across seven learning epochs, illuminated up to the currently selected epoch"
+          />
+        </Reveal>
+
+        {/* Epoch rail */}
+        <div className="flex items-center gap-1 overflow-x-auto pb-3 mb-10 no-scrollbar border-b border-[var(--color-line)]">
           {skillEvolutionEpochs.map((epoch, idx) => {
             const isActive = activeEpochIndex === idx;
             return (
               <button
                 key={epoch.id}
-                onClick={() => { sound.playClick(); setActiveEpochIndex(idx); }}
-                onMouseEnter={() => sound.playHover()}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-mono shrink-0 transition-all ${
-                  isActive
-                    ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold shadow-lg shadow-cyan-500/20 scale-[1.02]'
-                    : 'bg-slate-900/80 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
+                onClick={() => selectEpoch(idx)}
+                className={`shrink-0 px-4 py-3 text-left transition-colors border-b-2 -mb-px ${
+                  isActive ? 'border-[var(--color-accent)]' : 'border-transparent'
                 }`}
               >
-                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                <span className={`block text-[10px] font-mono ${isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink-faint)]'}`}>
                   {epoch.epoch}
                 </span>
-                <span>{epoch.title}</span>
+                <span className={`block text-xs font-medium whitespace-nowrap ${isActive ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink-faint)]'}`}>
+                  {epoch.title}
+                </span>
               </button>
             );
           })}
         </div>
 
-        {/* Active Epoch Main Container */}
-        <div className="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl relative mb-8">
-          
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800">
-            <div>
-              <span className="text-xs font-mono text-cyan-400 font-bold block mb-1">
-                EPOCH {activeEpoch.epoch} / 07
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-white font-heading">{activeEpoch.title}</h3>
-              <p className="text-xs font-mono text-slate-400 mt-1">{activeEpoch.subtitle}</p>
-            </div>
-
-            {/* Status Filter Buttons */}
-            <div className="flex items-center gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 self-start md:self-auto">
-              {[
-                { id: 'all', label: 'All' },
-                { id: 'learned', label: 'Learned' },
-                { id: 'actively developing', label: 'Developing' },
-                { id: 'exploring', label: 'Exploring' },
-              ].map((btn) => (
-                <button
-                  key={btn.id}
-                  onClick={() => { sound.playClick(); setFilterStatus(btn.id); }}
-                  className={`px-3 py-1.5 rounded-xl text-[11px] font-mono transition-all ${
-                    filterStatus === btn.id
-                      ? 'bg-slate-800 text-cyan-300 border border-cyan-500/40 font-bold'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  {btn.label}
-                </button>
-              ))}
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-start mb-8">
+          <div>
+            <h3 className="font-heading text-2xl text-[var(--color-ink)] mb-1">{activeEpoch.title}</h3>
+            <p className="text-xs font-mono text-[var(--color-ink-faint)]">{activeEpoch.subtitle}</p>
           </div>
-
-          <p className="text-xs sm:text-sm text-slate-300 my-6 font-sans leading-relaxed">
-            {activeEpoch.description}
-          </p>
-
-          {/* Skill Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredSkills.map((skill, sIdx) => {
-              const isLearned = skill.status.toLowerCase() === 'learned';
-              const isDeveloping = skill.status.toLowerCase() === 'actively developing';
-              const isExploring = skill.status.toLowerCase() === 'exploring';
-
-              return (
-                <div
-                  key={sIdx}
-                  onMouseEnter={() => sound.playHover()}
-                  className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-cyan-500/40 transition-all group flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
-                        {skill.name}
-                      </h4>
-
-                      <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded ${
-                        isLearned
-                          ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
-                          : isDeveloping
-                          ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40'
-                          : 'bg-purple-950 text-purple-300 border border-purple-500/40'
-                      }`}>
-                        {skill.status.toUpperCase()}
-                      </span>
-                    </div>
-
-                    <p className="text-[11px] text-slate-400 mt-2 font-mono leading-relaxed">
-                      {skill.note}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="flex flex-wrap items-center gap-1.5">
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => { sound.playClick(); setFilterStatus(f.id); }}
+                className={`px-3 py-1.5 rounded-full text-[11px] font-mono border transition-colors ${
+                  filterStatus === f.id
+                    ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                    : 'border-[var(--color-line)] text-[var(--color-ink-faint)] hover:border-[var(--color-line-strong)]'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
-
         </div>
 
+        <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed max-w-2xl mb-8">
+          {activeEpoch.description}
+        </p>
+
+        <ul className="divide-y divide-[var(--color-line)] border-t border-b border-[var(--color-line)]">
+          {filteredSkills.map((skill) => (
+            <li key={skill.name} className="flex items-center justify-between gap-4 py-4 group">
+              <div className="flex items-center gap-3 min-w-0">
+                <span
+                  className="w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ background: STATUS_COLOR[skill.status] }}
+                  aria-hidden="true"
+                />
+                <div className="min-w-0">
+                  <span className="block text-sm font-medium text-[var(--color-ink)]">{skill.name}</span>
+                  <span className="block text-xs text-[var(--color-ink-faint)] truncate">{skill.note}</span>
+                </div>
+              </div>
+              <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-[var(--color-ink-faint)]">
+                {skillStatusMeta[skill.status].label}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {activeEpochIndex < skillEvolutionEpochs.length - 1 && (
+          <button
+            onClick={() => selectEpoch(activeEpochIndex + 1)}
+            className="mt-8 inline-flex items-center gap-2 text-xs font-mono text-[var(--color-ink-faint)] hover:text-[var(--color-accent)] transition-colors"
+          >
+            <span>Next epoch — {skillEvolutionEpochs[activeEpochIndex + 1].title}</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
     </section>
   );

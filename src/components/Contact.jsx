@@ -1,212 +1,146 @@
 import React, { useState } from 'react';
-import { Mail, Copy, Check, Send, MessageSquare, MapPin, Clock, Sparkles } from 'lucide-react';
+import { Copy, Check, Send, MapPin, Clock } from 'lucide-react';
 import { Github, Linkedin } from './SocialIcons';
-import { personalInfo } from '../data/portfolioData';
 import { sound } from '../utils/sound';
+import Reveal from './motion/Reveal';
+
+const PRIMARY_EMAIL = 'warke.sujal281106@gmail.com';
+const EDU_EMAIL = '2024.sujalw@isu.ac.in';
+const PHONE = '+91 8169613561';
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
-
-  const primaryEmail = "warke.sujal281106@gmail.com";
-  const eduEmail = "2024.sujalw@isu.ac.in";
-  const phoneNumber = "+91 8169613561";
 
   const handleCopyEmail = (email) => {
     sound.playSuccess();
     navigator.clipboard.writeText(email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    setCopiedEmail(email);
+    setTimeout(() => setCopiedEmail(null), 2000);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     sound.playSuccess();
-    setSubmitted(true);
+    const subject = encodeURIComponent(`Portfolio inquiry from ${formData.name || 'a visitor'}`);
+    const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name} (${formData.email})`);
+    window.location.href = `mailto:${PRIMARY_EMAIL}?subject=${subject}&body=${body}`;
   };
 
   return (
-    <section id="contact" className="relative py-24 bg-[#050914] overflow-hidden border-t border-slate-800/80">
-      
-      {/* Background Lighting */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono mb-3">
-            <Mail className="w-3.5 h-3.5" />
-            <span>LET'S BUILD SOMETHING EXTRAORDINARY</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Get In <span className="text-gradient-cyan">Touch</span>
+    <section id="contact" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
+      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+        <Reveal>
+          <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
+            Final Chapter
+          </span>
+          <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-xl leading-tight">
+            Let's build something worth remembering.
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm font-mono mt-2">
-            Available for Software Engineering Internships, Projects & Collaborations
+          <p className="text-[var(--color-ink-faint)] text-sm max-w-lg mb-16">
+            Open to engineering internships, research collaborations, and interesting problems in general.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* Direct Channels */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 flex flex-col justify-between">
-            <div>
-              <h3 className="text-xl font-bold text-white font-heading mb-4">Direct Communication Channels</h3>
-              <p className="text-xs text-slate-300 mb-6 leading-relaxed">
-                Feel free to reach out directly via email, phone, or LinkedIn for project inquiries, technical roles, or open-source collaboration.
-              </p>
-
-              {/* Copy Primary Email Box */}
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400">
-                    <Mail className="w-5 h-5" />
-                  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <Reveal direction="left">
+            <div className="space-y-3 mb-8">
+              {[
+                { label: 'Personal Email', value: PRIMARY_EMAIL },
+                { label: 'University Email', value: EDU_EMAIL },
+              ].map((row) => (
+                <div key={row.value} className="flex items-center justify-between gap-3 p-4 rounded-2xl border border-[var(--color-line)]">
                   <div>
-                    <span className="text-[10px] font-mono text-slate-400 block">Personal Email</span>
-                    <span className="text-xs font-mono text-slate-100 font-bold">{primaryEmail}</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block">{row.label}</span>
+                    <span className="text-sm text-[var(--color-ink)]">{row.value}</span>
                   </div>
+                  <button
+                    onClick={() => handleCopyEmail(row.value)}
+                    aria-label={`Copy ${row.label}`}
+                    className="p-2 rounded-full border border-[var(--color-line)] text-[var(--color-ink-faint)] hover:text-[var(--color-ink)] transition-colors shrink-0"
+                  >
+                    {copiedEmail === row.value ? <Check className="w-3.5 h-3.5 text-[var(--color-accent)]" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
                 </div>
+              ))}
+            </div>
 
-                <button
-                  onClick={() => handleCopyEmail(primaryEmail)}
-                  onMouseEnter={() => sound.playHover()}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-cyan-300 border border-slate-700 flex items-center gap-1.5 transition-all"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied!' : 'Copy'}</span>
-                </button>
+            <div className="space-y-2 text-xs font-mono text-[var(--color-ink-faint)] mb-8">
+              <div className="flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5" /> {PHONE}
               </div>
-
-              {/* Copy University Email Box */}
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono text-slate-400 block">University Email</span>
-                    <span className="text-xs font-mono text-slate-100 font-bold">{eduEmail}</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => handleCopyEmail(eduEmail)}
-                  onMouseEnter={() => sound.playHover()}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-cyan-300 border border-slate-700 flex items-center gap-1.5 transition-all"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Copy</span>
-                </button>
-              </div>
-
-              {/* Status SLAs */}
-              <div className="space-y-3 font-mono text-xs text-slate-400 mb-8">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-emerald-400" />
-                  <span>Phone: <strong className="text-slate-200">{phoneNumber}</strong></span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-cyan-400" />
-                  <span>Location & Timezone: <strong className="text-slate-200">Mumbai, Maharashtra, India (IST)</strong></span>
-                </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5" /> Mumbai, Maharashtra, India (IST)
               </div>
             </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3 pt-6 border-t border-slate-800">
+            <div className="flex items-center gap-3">
               <a
                 href="https://github.com/sujalwarke28"
                 target="_blank"
                 rel="noreferrer"
-                onMouseEnter={() => sound.playHover()}
-                className="flex-1 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/40 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all"
+                className="flex-1 py-3 rounded-full border border-[var(--color-line)] text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:border-[var(--color-line-strong)] text-xs font-medium flex items-center justify-center gap-2 transition-colors"
               >
-                <Github className="w-4 h-4" /> GitHub Profile
+                <Github className="w-4 h-4" /> GitHub
               </a>
               <a
                 href="https://linkedin.com/in/sujalwarke"
                 target="_blank"
                 rel="noreferrer"
-                onMouseEnter={() => sound.playHover()}
-                className="flex-1 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-cyan-500/40 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all"
+                className="flex-1 py-3 rounded-full border border-[var(--color-line)] text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:border-[var(--color-line-strong)] text-xs font-medium flex items-center justify-center gap-2 transition-colors"
               >
-                <Linkedin className="w-4 h-4 text-cyan-400" /> LinkedIn
+                <Linkedin className="w-4 h-4" /> LinkedIn
               </a>
             </div>
-          </div>
+          </Reveal>
 
-          {/* Form */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800">
-            {submitted ? (
-              <div className="py-12 text-center space-y-4 animate-in fade-in">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto glow-green">
-                  <Check className="w-8 h-8 stroke-[3]" />
-                </div>
-                <h3 className="text-2xl font-bold text-white font-heading">Message Dispatched!</h3>
-                <p className="text-xs text-slate-300 max-w-sm mx-auto font-mono">
-                  Thank you! Your inquiry has been routed to Sujal's priority inbox. You will receive a prompt response soon.
-                </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="px-6 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-400"
-                >
-                  Send Another Message
-                </button>
+          <Reveal direction="right">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="contact-name" className="block text-xs font-mono text-[var(--color-ink-faint)] mb-1.5">Your name</label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-canvas-raised)] border border-[var(--color-line)] text-[var(--color-ink)] text-sm outline-none focus:border-[var(--color-accent)] transition-colors"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Sarah Connor"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 text-xs outline-none focus:border-cyan-500 transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1">Your Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. sarah@cyberdyne.com"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 text-xs outline-none focus:border-cyan-500 transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1">Project Details / Message</label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell me about your tech requirements or role opportunity..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 text-xs outline-none focus:border-cyan-500 transition-colors resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  onMouseEnter={() => sound.playHover()}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 text-white font-bold text-xs shadow-xl shadow-cyan-500/25 hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" /> Dispatch Message Stream
-                </button>
-              </form>
-            )}
-          </div>
-
+              <div>
+                <label htmlFor="contact-email" className="block text-xs font-mono text-[var(--color-ink-faint)] mb-1.5">Your email</label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-canvas-raised)] border border-[var(--color-line)] text-[var(--color-ink)] text-sm outline-none focus:border-[var(--color-accent)] transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="contact-message" className="block text-xs font-mono text-[var(--color-ink-faint)] mb-1.5">Message</label>
+                <textarea
+                  id="contact-message"
+                  rows={4}
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-canvas-raised)] border border-[var(--color-line)] text-[var(--color-ink)] text-sm outline-none focus:border-[var(--color-accent)] transition-colors resize-none"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-3.5 rounded-full bg-[var(--color-accent)] text-[#0a0a0a] font-medium text-sm flex items-center justify-center gap-2"
+              >
+                <Send className="w-4 h-4" /> Open in your email app
+              </button>
+              <p className="text-[10px] text-[var(--color-ink-faint)] text-center">
+                Opens a pre-filled email to {PRIMARY_EMAIL} — nothing is stored on this site.
+              </p>
+            </form>
+          </Reveal>
         </div>
-
       </div>
     </section>
   );

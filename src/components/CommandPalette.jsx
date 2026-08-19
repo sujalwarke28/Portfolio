@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Command, Globe, Layers, FolderGit2, Terminal, Mail, Sliders, Volume2, VolumeX, X, FileText, Compass, GitBranch, ShieldCheck, Brain, Award } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Globe, Layers, Terminal, Mail, Volume2, VolumeX, X, FileText, Compass, GitBranch, ShieldCheck, Brain, Users } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted }) {
@@ -11,101 +12,106 @@ export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted })
         e.preventDefault();
         sound.playClick();
         if (isOpen) onClose();
-        else {
-          // Open
-          document.dispatchEvent(new CustomEvent('open-command-palette'));
-        }
+        else document.dispatchEvent(new CustomEvent('open-command-palette'));
       }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
+      if (e.key === 'Escape' && isOpen) onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
-  const actions = [
-    { label: 'Jump to Overview Header', icon: Globe, action: () => scrollToSection('#hero') },
-    { label: 'Jump to Engineering Thesis', icon: Compass, action: () => scrollToSection('#about') },
-    { label: 'Jump to 7-Epoch Skill Evolution', icon: GitBranch, action: () => scrollToSection('#evolution') },
-    { label: 'Jump to AI Security Spectrum', icon: ShieldCheck, action: () => scrollToSection('#ai-security') },
-    { label: 'Jump to Deep Case Studies', icon: Layers, action: () => scrollToSection('#projects') },
-    { label: 'Jump to Questions I\'m Chasing', icon: Brain, action: () => scrollToSection('#research') },
-    { label: 'Jump to Principles & Influences', icon: Award, action: () => scrollToSection('#principles') },
-    { label: 'Jump to Resume & Credentials', icon: FileText, action: () => scrollToSection('#resume') },
-    { label: 'Jump to CLI Terminal Lab', icon: Terminal, action: () => scrollToSection('#terminal') },
-    { label: 'Jump to Direct Contact Channels', icon: Mail, action: () => scrollToSection('#contact') },
-    { 
-      label: isMuted ? 'Unmute Sound Effects' : 'Mute Sound Effects', 
-      icon: isMuted ? VolumeX : Volume2, 
-      action: () => { const m = sound.toggleMute(); setIsMuted(m); } 
-    },
-  ];
-
   const scrollToSection = (href) => {
     sound.playClick();
     onClose();
-    const elem = document.querySelector(href);
-    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const filtered = actions.filter(a => a.label.toLowerCase().includes(query.toLowerCase()));
+  const actions = [
+    { label: 'Jump to Overview', icon: Globe, action: () => scrollToSection('#hero') },
+    { label: 'Jump to Engineering Thesis', icon: Compass, action: () => scrollToSection('#about') },
+    { label: 'Jump to Skill Evolution', icon: GitBranch, action: () => scrollToSection('#evolution') },
+    { label: 'Jump to Lab Case Studies', icon: Layers, action: () => scrollToSection('#projects') },
+    { label: 'Jump to AI Security Spectrum', icon: ShieldCheck, action: () => scrollToSection('#ai-security') },
+    { label: "Jump to Questions I'm Chasing", icon: Brain, action: () => scrollToSection('#research') },
+    { label: 'Jump to Influences', icon: Users, action: () => scrollToSection('#influences') },
+    { label: 'Jump to Résumé & Credentials', icon: FileText, action: () => scrollToSection('#resume') },
+    { label: 'Jump to Terminal', icon: Terminal, action: () => scrollToSection('#terminal') },
+    { label: 'Jump to Contact', icon: Mail, action: () => scrollToSection('#contact') },
+    {
+      label: isMuted ? 'Unmute interface sound' : 'Mute interface sound',
+      icon: isMuted ? VolumeX : Volume2,
+      action: () => { const m = sound.toggleMute(); setIsMuted(m); }
+    },
+  ];
+
+  const filtered = actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
-      <div className="glass-panel max-w-xl w-full rounded-3xl border border-cyan-500/40 shadow-2xl overflow-hidden">
-        
-        {/* Search Input Bar */}
-        <div className="p-4 border-b border-slate-800 flex items-center gap-3">
-          <Search className="w-5 h-5 text-cyan-400" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a command or jump to section..."
-            className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-500 font-sans text-sm"
-            autoFocus
-          />
-          <button onClick={onClose} className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/80"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="glass-overlay max-w-xl w-full rounded-3xl overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Command palette"
+          >
+            <div className="p-4 border-b border-[var(--color-line)] flex items-center gap-3">
+              <Search className="w-4 h-4 text-[var(--color-accent)]" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Jump to a section or run a command..."
+                aria-label="Command palette search"
+                className="flex-1 bg-transparent border-none outline-none text-[var(--color-ink)] placeholder-[var(--color-ink-faint)] text-sm"
+                autoFocus
+              />
+              <button onClick={onClose} aria-label="Close command palette" className="p-1.5 rounded-full text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-        {/* Action Options List */}
-        <div className="p-2 max-h-[320px] overflow-y-auto space-y-1">
-          {filtered.length === 0 ? (
-            <div className="p-6 text-center text-xs text-slate-500 font-mono">No matching commands found</div>
-          ) : (
-            filtered.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={idx}
-                  onClick={item.action}
-                  onMouseEnter={() => sound.playHover()}
-                  className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-slate-900/80 text-left transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-slate-900 text-cyan-400 group-hover:scale-110 transition-transform">
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <span className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300">{item.label}</span>
-                  </div>
-                  <span className="text-[10px] font-mono text-slate-500">Jump ↵</span>
-                </button>
-              );
-            })
-          )}
-        </div>
+            <div className="p-2 max-h-[320px] overflow-y-auto">
+              {filtered.length === 0 ? (
+                <div className="p-6 text-center text-xs text-[var(--color-ink-faint)] font-mono">No matching commands</div>
+              ) : (
+                filtered.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={item.action}
+                      className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-white/5 text-left transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className="w-4 h-4 text-[var(--color-ink-faint)] group-hover:text-[var(--color-accent)] transition-colors" />
+                        <span className="text-xs text-[var(--color-ink-dim)] group-hover:text-[var(--color-ink)]">{item.label}</span>
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
 
-        {/* Footer */}
-        <div className="bg-[#090d16] p-3 border-t border-slate-800 text-[11px] font-mono text-slate-500 flex items-center justify-between">
-          <span>Press ESC to close</span>
-          <span>Cmd + K Shortcut</span>
-        </div>
-      </div>
-    </div>
+            <div className="px-4 py-3 border-t border-[var(--color-line)] text-[10px] font-mono text-[var(--color-ink-faint)] flex items-center justify-between">
+              <span>ESC to close</span>
+              <span>⌘K to toggle</span>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

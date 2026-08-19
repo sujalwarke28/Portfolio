@@ -1,103 +1,152 @@
-import React, { useState } from 'react';
-import { ShieldCheck, Lock, AlertTriangle, Cpu, CheckCircle2, ArrowRight, Layers, Key } from 'lucide-react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { ShieldCheck } from 'lucide-react';
 import { aiSecuritySpectrum } from '../data/portfolioData';
 import { sound } from '../utils/sound';
+import { useCanvasScene } from '../hooks/useCanvasScene';
+import Reveal from './motion/Reveal';
+
+const GATE_STEP_IDX = 4; // "Therefore, AI Needs Boundaries"
+const AUTH_STEP_IDX = 5; // "Authorization"
+
+function createBoundaryScene(ctx, { width, height }, activeStepRef) {
+  const gateX = width * 0.62;
+  let particles = Array.from({ length: 26 }, () => ({
+    x: Math.random() * gateX * 0.9,
+    y: Math.random() * height,
+    speed: 0.6 + Math.random() * 0.6,
+    authorized: Math.random() > 0.35,
+    state: 'flowing',
+    settleX: gateX - 8 - Math.random() * 40,
+  }));
+
+  return {
+    render() {
+      ctx.clearRect(0, 0, width, height);
+      const stepIdx = activeStepRef.current;
+      const gateActive = stepIdx >= GATE_STEP_IDX;
+      const authorizing = stepIdx >= AUTH_STEP_IDX;
+      const trusted = stepIdx >= 7;
+
+      if (gateActive) {
+        ctx.strokeStyle = trusted ? 'rgba(232, 103, 44, 0.35)' : 'rgba(241, 239, 231, 0.18)';
+        ctx.setLineDash(trusted ? [] : [3, 5]);
+        ctx.beginPath();
+        ctx.moveTo(gateX, 8);
+        ctx.lineTo(gateX, height - 8);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      particles.forEach((p) => {
+        if (!gateActive || trusted) {
+          p.x += p.speed;
+          if (p.x > width + 5) p.x = -5;
+        } else if (p.x < p.settleX) {
+          p.x += p.speed;
+        } else if (authorizing) {
+          if (p.state === 'flowing') p.state = p.authorized ? 'pass' : 'reject';
+          if (p.state === 'pass') {
+            p.x += p.speed * 1.4;
+            if (p.x > width + 5) p.x = -5 - Math.random() * 40;
+          } else {
+            p.x -= 0.3;
+          }
+        }
+
+        const color = trusted
+          ? 'rgba(232, 103, 44, 0.85)'
+          : !gateActive
+          ? 'rgba(241, 239, 231, 0.4)'
+          : p.state === 'pass'
+          ? 'rgba(232, 103, 44, 0.85)'
+          : p.state === 'reject'
+          ? 'rgba(180, 70, 70, 0.6)'
+          : 'rgba(241, 239, 231, 0.35)';
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+      });
+    },
+    destroy() {}
+  };
+}
 
 export default function AISecuritySpectrum() {
-  const [activeStepIndex, setActiveStepIndex] = useState(4); // Default to Step 5 (Authorization)
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const canvasRef = useRef(null);
+  const activeStepRef = useRef(0);
+
+  useEffect(() => { activeStepRef.current = activeStepIndex; }, [activeStepIndex]);
+
+  const sceneFactory = useCallback((ctx, meta) => createBoundaryScene(ctx, meta, activeStepRef), []);
+  useCanvasScene(canvasRef, sceneFactory);
+
+  const active = aiSecuritySpectrum[activeStepIndex];
 
   return (
-    <section id="ai-security" className="relative py-24 bg-[#08090a] overflow-hidden border-t border-slate-800/80">
-      
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[160px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono mb-4">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>AI SYSTEMS & SECURITY THESIS</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 font-heading">
-            The AI Capability <span className="text-gradient-green">& Authorization Spectrum</span>
+    <section id="ai-security" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <Reveal>
+          <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-signal-soft)] mb-4">
+            AI Systems & Security
+          </span>
+          <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
+            Capability needs a boundary.
           </h2>
-          <p className="text-slate-300 text-xs sm:text-sm font-mono">
-            Why intelligent agents require deterministic RBAC guardrails, permission boundaries, and human-in-the-loop authorization gates.
+          <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-14">
+            Step through what a model can do, and where that stops being safe without deterministic authorization.
           </p>
-        </div>
+        </Reveal>
 
-        {/* Step-by-step Interactive Spectrum */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-10">
+        <Reveal>
+          <canvas
+            ref={canvasRef}
+            className="w-full h-[160px] sm:h-[200px] mb-8"
+            role="img"
+            aria-label="Diagram of particles attempting to cross a permission boundary, blocked unless authorized"
+          />
+        </Reveal>
+
+        <div className="flex items-center gap-1 overflow-x-auto pb-3 mb-10 no-scrollbar border-b border-[var(--color-line)]">
           {aiSecuritySpectrum.map((item, idx) => {
             const isActive = activeStepIndex === idx;
-            const isCritical = idx === 4;
-
             return (
-              <div
-                key={idx}
+              <button
+                key={item.step}
                 onClick={() => { sound.playClick(); setActiveStepIndex(idx); }}
-                onMouseEnter={() => sound.playHover()}
-                className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                  isActive
-                    ? isCritical
-                      ? 'border-emerald-500 bg-emerald-950/40 glow-green scale-[1.03]'
-                      : 'border-cyan-500 bg-cyan-950/40 glow-cyan scale-[1.03]'
-                    : 'border-slate-800 bg-slate-900/60 hover:border-slate-700'
+                className={`shrink-0 px-3.5 py-3 text-left transition-colors border-b-2 -mb-px ${
+                  isActive ? 'border-[var(--color-accent)]' : 'border-transparent'
                 }`}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono text-slate-500">STAGE {item.step}</span>
-                    <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
-                      isCritical ? 'bg-emerald-950 text-emerald-300' : 'bg-slate-800 text-slate-300'
-                    }`}>
-                      {item.level}
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-100">{item.title}</h4>
-                </div>
-
-                <div className="mt-4 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-cyan-400">
-                  <span>Inspect Risk</span>
-                  <ArrowRight className="w-3 h-3" />
-                </div>
-              </div>
+                <span className={`block text-[10px] font-mono ${isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink-faint)]'}`}>
+                  {item.step}
+                </span>
+                <span className={`block text-xs font-medium whitespace-nowrap ${isActive ? 'text-[var(--color-ink)]' : 'text-[var(--color-ink-faint)]'}`}>
+                  {item.title}
+                </span>
+              </button>
             );
           })}
         </div>
 
-        {/* Active Stage Deep Inspection Box */}
-        <div className="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl relative">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-emerald-400">
-              <Lock className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-xs font-mono text-emerald-400 font-bold block">
-                STAGE {aiSecuritySpectrum[activeStepIndex].step} ANALYSIS
-              </span>
-              <h3 className="text-2xl font-bold text-white font-heading">
-                {aiSecuritySpectrum[activeStepIndex].title}
-              </h3>
-            </div>
-          </div>
+        <div className="max-w-2xl">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
+            {active.level}
+          </span>
+          <h3 className="font-heading text-2xl text-[var(--color-ink)] mb-4">{active.title}</h3>
+          <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed mb-8">{active.desc}</p>
 
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans mb-6">
-            {aiSecuritySpectrum[activeStepIndex].desc}
-          </p>
-
-          {/* Key Principle Alert */}
-          <div className="p-4 rounded-2xl bg-slate-950 border border-emerald-500/30 text-xs font-mono text-emerald-300 flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold text-white block mb-1">CORE ARCHITECTURE PRINCIPLE:</span>
-              "An LLM should never be trusted as the authorization authority. Permissions, database tenant boundaries, and project authorization must be checked deterministically outside the LLM context."
-            </div>
+          <div className="lab-panel rounded-2xl p-5 flex items-start gap-3">
+            <ShieldCheck className="w-4 h-4 text-[var(--color-signal-soft)] shrink-0 mt-0.5" />
+            <p className="text-xs font-mono text-[var(--color-ink-dim)] leading-relaxed">
+              <span className="text-[var(--color-ink)] font-semibold">Core principle: </span>
+              An LLM should never be trusted as the authorization authority. Permissions and tenant boundaries are checked deterministically, outside the model's context.
+            </p>
           </div>
         </div>
-
       </div>
     </section>
   );

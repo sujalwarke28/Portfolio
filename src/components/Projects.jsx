@@ -1,234 +1,153 @@
 import React, { useState } from 'react';
-import { 
-  FolderGit2, 
-  ExternalLink, 
-  Zap, 
-  Code2, 
-  Layers, 
-  Sparkles, 
-  X, 
-  CheckCircle2, 
-  Lock, 
-  Cpu, 
-  FileText,
-  ShieldCheck,
-  ArrowRight
-} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ExternalLink } from 'lucide-react';
 import { Github } from './SocialIcons';
 import { labCaseStudies } from '../data/portfolioData';
 import { sound } from '../utils/sound';
+import Reveal from './motion/Reveal';
 
-export default function Projects() {
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
+const FLOW_FIELDS = [
+  { key: 'problem', label: 'Problem' },
+  { key: 'whyItMattered', label: 'Why It Mattered' },
+  { key: 'approach', label: 'Approach' },
+  { key: 'implementation', label: 'Implementation' },
+  { key: 'challenges', label: 'Challenges' },
+  { key: 'result', label: 'Result' },
+  { key: 'whatILearned', label: 'What I Learned' },
+];
 
-  const categories = ['All', ...Array.from(new Set(labCaseStudies.map(p => p.category)))];
-
-  const filteredStudies = activeFilter === 'All' 
-    ? labCaseStudies 
-    : labCaseStudies.filter(p => p.category === activeFilter);
-
+function CaseStudy({ study, isOpen, onToggle }) {
   return (
-    <section id="projects" className="relative py-24 bg-[#050608] overflow-hidden border-t border-slate-800/80">
-      
-      {/* Background Atmosphere */}
-      <div className="absolute top-1/2 right-10 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[160px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono mb-4">
-            <Layers className="w-3.5 h-3.5" />
-            <span>LAB CASE STUDIES & SYSTEMS</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 font-heading">
-            Current & Significant <span className="text-gradient-cyan">Engineering Works</span>
-          </h2>
-          <p className="text-slate-300 text-xs sm:text-sm font-mono">
-            Detailed case studies focusing on problem decomposition, system architecture, authorization guardrails, and real-world deployment.
-          </p>
+    <div className="border-b border-[var(--color-line)] py-8">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-start justify-between gap-6 text-left group"
+        aria-expanded={isOpen}
+      >
+        <div>
+          <span className="text-[11px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
+            {study.category}
+          </span>
+          <h3 className="font-heading text-2xl sm:text-3xl text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors mb-2">
+            {study.title}
+          </h3>
+          <p className="text-sm text-[var(--color-ink-faint)] max-w-2xl">{study.tagline}</p>
         </div>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className="shrink-0 mt-2">
+          <ChevronDown className="w-5 h-5 text-[var(--color-ink-faint)]" />
+        </motion.div>
+      </button>
 
-        {/* Filter Categories */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => { sound.playClick(); setActiveFilter(cat); }}
-              onMouseEnter={() => sound.playHover()}
-              className={`px-4 py-2 rounded-xl text-xs font-mono transition-all ${
-                activeFilter === cat
-                  ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold shadow-lg shadow-cyan-500/20'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Case Studies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {filteredStudies.map((study) => (
-            <div
-              key={study.id}
-              className="glass-panel glass-panel-hover rounded-3xl border border-slate-800 p-6 sm:p-8 flex flex-col justify-between group"
-            >
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+            exit={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="pt-8 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10">
               <div>
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-900 text-cyan-300 border border-slate-800">
-                    {study.category}
-                  </span>
-                  {study.demoUrl && (
-                    <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Live System
-                    </span>
-                  )}
+                <p className="text-sm text-[var(--color-ink-dim)] leading-relaxed mb-8">{study.summary}</p>
+
+                <div className="space-y-6 mb-8">
+                  {FLOW_FIELDS.map((f) => (
+                    <div key={f.key}>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-1.5">
+                        {f.label}
+                      </span>
+                      <p className="text-xs text-[var(--color-ink-dim)] leading-relaxed">{study[f.key]}</p>
+                    </div>
+                  ))}
                 </div>
 
-                <h3 className="text-2xl font-bold text-white font-heading mb-2 group-hover:text-cyan-300 transition-colors">
-                  {study.title}
-                </h3>
-                <p className="text-xs font-mono text-cyan-400 mb-4">{study.tagline}</p>
-
-                <p className="text-xs text-slate-300 mb-6 leading-relaxed">
-                  {study.summary}
-                </p>
-
-                {/* Core Principle Callout */}
-                <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono text-slate-300 mb-6">
-                  <span className="text-cyan-400 font-bold block mb-1">⚡ Core Engineering Insight:</span>
-                  {study.corePrinciple}
-                </div>
-
-                {/* Highlights Badges */}
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                  {study.highlights.map((h, hIdx) => (
-                    <span key={hIdx} className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-slate-900 text-slate-300 border border-slate-800">
-                      ✓ {h}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {study.highlights.map((h) => (
+                    <span key={h} className="text-[10px] font-mono px-2.5 py-1 rounded-full border border-[var(--color-line)] text-[var(--color-ink-faint)]">
+                      {h}
                     </span>
                   ))}
                 </div>
-              </div>
 
-              {/* Actions */}
-              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                <button
-                  onClick={() => { sound.playClick(); setSelectedCaseStudy(study); }}
-                  className="text-xs font-mono text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 group/btn"
-                >
-                  <span>Inspect Architecture & Code</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {study.demoUrl && (
                     <a
                       href={study.demoUrl}
                       target="_blank"
                       rel="noreferrer"
-                      onMouseEnter={() => sound.playHover()}
-                      className="px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 text-xs font-mono font-semibold flex items-center gap-1 transition-all"
+                      className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--color-accent)] hover:underline"
                     >
-                      <Zap className="w-3.5 h-3.5" /> Demo
+                      <ExternalLink className="w-3.5 h-3.5" /> Live demo
                     </a>
                   )}
-
                   {study.githubUrl && (
                     <a
                       href={study.githubUrl}
                       target="_blank"
                       rel="noreferrer"
-                      onMouseEnter={() => sound.playHover()}
-                      className="p-2 rounded-lg bg-slate-900 text-slate-300 hover:text-white hover:border-cyan-500/40 border border-slate-800"
+                      className="inline-flex items-center gap-1.5 text-xs font-mono text-[var(--color-ink-faint)] hover:text-[var(--color-ink)]"
                     >
-                      <Github className="w-4 h-4" />
+                      <Github className="w-3.5 h-3.5" /> Source
                     </a>
                   )}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
 
-      </div>
-
-      {/* Case Study Detail Modal */}
-      {selectedCaseStudy && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in fade-in">
-          <div className="glass-panel max-w-3xl w-full p-6 sm:p-8 rounded-3xl border border-cyan-500/40 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setSelectedCaseStudy(null)}
-              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <span className="text-[10px] font-mono text-cyan-400 font-bold block mb-1">{selectedCaseStudy.category}</span>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white font-heading mb-2">{selectedCaseStudy.title}</h3>
-            <p className="text-xs font-mono text-slate-400 mb-6">{selectedCaseStudy.tagline}</p>
-
-            <div className="space-y-6 mb-8">
-              <div>
-                <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Problem Statement</h4>
-                <p className="text-xs text-slate-300 leading-relaxed font-sans">{selectedCaseStudy.problem}</p>
-              </div>
-
-              {/* Architecture Steps */}
-              <div>
-                <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">System Architecture Pipeline</h4>
-                <div className="space-y-2">
-                  {selectedCaseStudy.architecture.map((step, sIdx) => (
-                    <div key={sIdx} className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-cyan-300">
+              <div className="lg:sticky lg:top-24 lg:self-start">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
+                  Architecture Pipeline
+                </span>
+                <div className="space-y-1.5 mb-6">
+                  {study.architecture.map((step) => (
+                    <div key={step} className="text-xs font-mono text-[var(--color-ink-dim)] px-3 py-2 rounded-lg bg-[var(--color-canvas-raised)] border border-[var(--color-line)]">
                       {step}
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Core Code Pattern */}
-              <div>
-                <h4 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Core Pattern Implementation</h4>
-                <pre className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-200 overflow-x-auto">
-                  {selectedCaseStudy.codeSnippet}
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink-faint)] block mb-2">
+                  Core Pattern
+                </span>
+                <pre className="text-[11px] font-mono text-[var(--color-ink-dim)] p-4 rounded-xl bg-[var(--color-canvas-deep)] border border-[var(--color-line)] overflow-x-auto leading-relaxed">
+                  {study.codeSnippet}
                 </pre>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
-            <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-slate-800">
-              {selectedCaseStudy.demoUrl && (
-                <a
-                  href={selectedCaseStudy.demoUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 text-xs font-semibold flex items-center gap-2"
-                >
-                  <Zap className="w-4 h-4 text-cyan-400" /> Launch System Demo
-                </a>
-              )}
+export default function Projects() {
+  const [openId, setOpenId] = useState(labCaseStudies[0].id);
 
-              {selectedCaseStudy.githubUrl && (
-                <a
-                  href={selectedCaseStudy.githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-2"
-                >
-                  <Github className="w-4 h-4" /> View GitHub Repository
-                </a>
-              )}
+  const toggle = (id) => {
+    sound.playClick();
+    setOpenId((current) => (current === id ? null : id));
+  };
 
-              <button
-                onClick={() => setSelectedCaseStudy(null)}
-                className="px-5 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs"
-              >
-                Close Inspector
-              </button>
-            </div>
-          </div>
+  return (
+    <section id="projects" className="relative py-28 md:py-36 border-t border-[var(--color-line)]">
+      <div className="max-w-4xl mx-auto px-6 lg:px-8">
+        <Reveal>
+          <span className="block text-[11px] font-mono uppercase tracking-[0.2em] text-[var(--color-accent)] mb-4">
+            Lab Case Studies
+          </span>
+          <h2 className="font-heading font-light text-3xl sm:text-5xl text-[var(--color-ink)] mb-4 max-w-2xl leading-tight">
+            Current & significant engineering work.
+          </h2>
+          <p className="text-[var(--color-ink-faint)] text-sm max-w-xl mb-8">
+            Problem, approach, architecture, and what actually went wrong — not a feature list.
+          </p>
+        </Reveal>
+
+        <div>
+          {labCaseStudies.map((study) => (
+            <CaseStudy key={study.id} study={study} isOpen={openId === study.id} onToggle={() => toggle(study.id)} />
+          ))}
         </div>
-      )}
+      </div>
     </section>
   );
 }
