@@ -68,15 +68,27 @@ function createEvolutionScene(ctx, { width, height, isCompact }, activeEpochRef)
       ctx.clearRect(0, 0, width, height);
       const activeIdx = activeEpochRef.current;
 
+      // Faint baseline dot-grid so the panel always reads as an instrument.
+      ctx.fillStyle = 'rgba(241, 239, 231, 0.06)';
+      const gridStep = 26;
+      for (let gx = gridStep / 2; gx < width; gx += gridStep) {
+        for (let gy = gridStep / 2; gy < height; gy += gridStep) {
+          ctx.beginPath();
+          ctx.arc(gx, gy, 1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
       edges.forEach(([a, b]) => {
         const litA = a.epochIdx <= activeIdx;
         const litB = b.epochIdx <= activeIdx;
         if (!litA || !litB) {
-          ctx.strokeStyle = 'rgba(241, 239, 231, 0.04)';
+          ctx.strokeStyle = 'rgba(241, 239, 231, 0.12)';
+          ctx.lineWidth = 1;
         } else {
-          ctx.strokeStyle = 'rgba(232, 103, 44, 0.18)';
+          ctx.strokeStyle = 'rgba(232, 103, 44, 0.32)';
+          ctx.lineWidth = 1.4;
         }
-        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -86,17 +98,17 @@ function createEvolutionScene(ctx, { width, height, isCompact }, activeEpochRef)
       nodes.forEach((node) => {
         const lit = node.epochIdx <= activeIdx;
         const isCurrent = node.epochIdx === activeIdx;
-        const bob = Math.sin(t / 900 + node.phase) * (lit ? 2 : 0);
-        const r = isCurrent ? 3.4 : 2.4;
+        const bob = Math.sin(t / 900 + node.phase) * (lit ? 2 : 1);
+        const r = isCurrent ? 4.4 : lit ? 3.4 : 2.8;
         ctx.beginPath();
         ctx.arc(node.x, node.baseY + bob, r, 0, Math.PI * 2);
-        ctx.fillStyle = lit ? STATUS_COLOR[node.status] : 'rgba(241, 239, 231, 0.06)';
+        ctx.fillStyle = lit ? STATUS_COLOR[node.status] : 'rgba(241, 239, 231, 0.22)';
         ctx.fill();
         if (isCurrent) {
           ctx.beginPath();
-          ctx.arc(node.x, node.baseY + bob, r + 5, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(232, 103, 44, 0.25)';
-          ctx.lineWidth = 1;
+          ctx.arc(node.x, node.baseY + bob, r + 6, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(232, 103, 44, 0.35)';
+          ctx.lineWidth = 1.5;
           ctx.stroke();
         }
       });

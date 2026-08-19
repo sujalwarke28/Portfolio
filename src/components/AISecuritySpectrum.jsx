@@ -29,6 +29,18 @@ function createBoundaryScene(ctx, { width, height }, activeStepRef) {
       const authorizing = stepIdx >= AUTH_STEP_IDX;
       const trusted = stepIdx >= 7;
 
+      // Faint baseline dot-grid so the panel always reads as an instrument,
+      // never as an empty box, regardless of particle state.
+      ctx.fillStyle = 'rgba(241, 239, 231, 0.07)';
+      const gridStep = 28;
+      for (let gx = gridStep / 2; gx < width; gx += gridStep) {
+        for (let gy = gridStep / 2; gy < height; gy += gridStep) {
+          ctx.beginPath();
+          ctx.arc(gx, gy, 1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
       if (gateActive) {
         ctx.strokeStyle = trusted ? 'rgba(232, 103, 44, 0.35)' : 'rgba(241, 239, 231, 0.18)';
         ctx.setLineDash(trusted ? [] : [3, 5]);
@@ -57,19 +69,22 @@ function createBoundaryScene(ctx, { width, height }, activeStepRef) {
         }
 
         const color = trusted
-          ? 'rgba(232, 103, 44, 0.85)'
+          ? 'rgba(232, 103, 44, 0.95)'
           : !gateActive
-          ? 'rgba(241, 239, 231, 0.4)'
+          ? 'rgba(241, 239, 231, 0.65)'
           : p.state === 'pass'
-          ? 'rgba(232, 103, 44, 0.85)'
+          ? 'rgba(232, 103, 44, 0.95)'
           : p.state === 'reject'
-          ? 'rgba(180, 70, 70, 0.6)'
-          : 'rgba(241, 239, 231, 0.35)';
+          ? 'rgba(210, 90, 90, 0.75)'
+          : 'rgba(241, 239, 231, 0.55)';
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 3.2, 0, Math.PI * 2);
         ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 6;
         ctx.fill();
+        ctx.shadowBlur = 0;
       });
     },
     destroy() {}
