@@ -17,7 +17,7 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeFilter, setActiveFilter] = useState('All');
 
-  const categories = ['All', 'Distributed Systems & Cloud', 'AI & Software Engineering Tools', 'Frontend & Graphics Performance'];
+  const categories = ['All', ...Array.from(new Set(featuredProjects.map(p => p.category)))];
 
   const filteredProjects = activeFilter === 'All' 
     ? featuredProjects 

@@ -300,69 +300,53 @@ export const incidentDashboardData = {
 
 export const featuredProjects = [
   {
-    id: "nexus-cloud",
-    title: "NexusCloud: Distributed Task & Event Engine",
-    category: "Distributed Systems & Cloud",
-    description: "Low-latency event processing platform designed to handle 50,000+ tasks per second with Redis cluster queue management and worker pool auto-scaling.",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
-    tags: ["Go", "Redis", "Docker", "Kubernetes", "gRPC", "Prometheus"],
-    metrics: { throughput: "52k req/sec", latency: "1.8ms", testCoverage: "98%" },
-    architecture: "Client → NGINX Load Balancer → Go Microservices → Redis Streams → PostgreSQL Cluster",
-    codeSnippet: `// Go worker pool dispatch logic
-func (p *WorkerPool) Dispatch(ctx context.Context, job Job) error {
-    select {
-    case p.jobQueue <- job:
-        metrics.Increment("jobs_dispatched")
-        return nil
-    case <-ctx.Done():
-        return ctx.Err()
-    }
-}`,
-    demoUrl: "https://github.com/sujalwarke/nexus-cloud",
-    githubUrl: "https://github.com/sujalwarke/nexus-cloud",
-  },
-  {
-    id: "ai-code-copilot",
-    title: "Synthetix AI: Code Review & AST Security Agent",
-    category: "AI & Software Engineering Tools",
-    description: "Intelligent code analysis tool that parses Abstract Syntax Trees (AST) in real time to catch memory leaks, SQL injection vulnerabilities, and type errors before pull requests are merged.",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
-    tags: ["TypeScript", "Python", "OpenAI API", "Pinecone", "React", "Tailwind"],
-    metrics: { astDepth: "Level 14", accuracy: "96.4%", latency: "340ms" },
-    architecture: "Monaco Editor → Babel/TypeScript Parser → Vector Search → LLM Analysis Stream → Diff Highlight",
-    codeSnippet: `// AST Node vulnerability inspector
-function inspectASTNode(node: ASTNode): SecurityWarning[] {
-  if (node.type === 'CallExpression' && node.callee.name === 'eval') {
-    return [{ rule: 'NO_EVAL', severity: 'CRITICAL', line: node.loc.start.line }];
-  }
-  return [];
-}`,
-    demoUrl: "https://github.com/sujalwarke/synthetix-ai",
-    githubUrl: "https://github.com/sujalwarke/synthetix-ai",
-  },
-  {
-    id: "hyper-canvas-engine",
-    title: "HyperCanvas: 60FPS Real-Time Collaboration Canvas",
-    category: "Frontend & Graphics Performance",
-    description: "WebSockets + WebGL powered collaborative whiteboard supporting 10,000 active nodes with zero latency lag, spatial spatial indexing, and undo/redo time travel.",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "WebGL", "HTML5 Canvas", "WebSockets", "Node.js", "Zustand"],
-    metrics: { fps: "60 FPS", concurrentUsers: "1,000+", stateSync: "8ms" },
-    architecture: "React Canvas Layer → QuadTree Spatial Index → WebSocket Delta Compressor → Node Server",
-    codeSnippet: `// QuadTree spatial collision search
-class QuadTree {
-  insert(point) {
-    if (!this.boundary.contains(point)) return false;
-    if (this.points.length < this.capacity) {
-      this.points.push(point);
-      return true;
-    }
-    if (!this.divided) this.subdivide();
-    return (this.northWest.insert(point) || this.northEast.insert(point));
+    id: "titanminds-factory",
+    title: "Titanminds Factory Management System",
+    category: "Industrial Systems & ERP",
+    description: "Comprehensive industrial factory management system built for real-time inventory tracking, production line scheduling, machine telemetry monitoring, and automated maintenance dispatch.",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "Node.js", "Express", "PostgreSQL", "Tailwind CSS", "REST API"],
+    metrics: { efficiency: "+34%", uptime: "99.9%", latency: "18ms" },
+    architecture: "React Frontend → NGINX Reverse Proxy → Node.js Express API → PostgreSQL Database Cluster",
+    codeSnippet: `// Factory Machine Telemetry & Maintenance Queue Dispatcher
+export async function scheduleMachineMaintenance(machineId, telemetryData) {
+  if (telemetryData.temperature > 85.0 || telemetryData.vibrationIndex > 7.5) {
+    const ticket = await db.query(
+      'INSERT INTO maintenance_tickets (machine_id, status, priority, triggered_at) VALUES ($1, $2, $3, NOW()) RETURNING *',
+      [machineId, 'URGENT', 'CRITICAL']
+    );
+    await dispatchAlertNotification(ticket.rows[0]);
+    return ticket.rows[0];
   }
 }`,
-    demoUrl: "https://github.com/sujalwarke/hyper-canvas",
-    githubUrl: "https://github.com/sujalwarke/hyper-canvas",
+    demoUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
+    githubUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
+  },
+  {
+    id: "reom-co",
+    title: "ReOm.Co: Retail Operations Management System",
+    category: "Enterprise Retail Operations",
+    description: "All-in-one retail operations management suite streamlining point-of-sale (POS) transactions, multi-store stock synchronization, supplier ordering pipelines, and analytics telemetry.",
+    image: "https://images.unsplash.com/photo-1556742049-0a67e5720f6e?auto=format&fit=crop&w=800&q=80",
+    tags: ["TypeScript", "Next.js", "GraphQL", "Redis", "Prisma ORM", "Docker"],
+    metrics: { posSync: "Sub-second", storeSync: "100%", reqPerSec: "12.4k" },
+    architecture: "Next.js POS App → GraphQL Gateway → Redis Caching Layer → Prisma ORM → PostgreSQL",
+    codeSnippet: `// Multi-Store Inventory Delta Synchronization Handler
+export async function syncStoreInventoryDelta(storeId, itemSkus) {
+  const cacheKey = \`inventory:store:\${storeId}\`;
+  const cachedInventory = await redis.get(cacheKey);
+  
+  if (cachedInventory) {
+    const parsed = JSON.parse(cachedInventory);
+    return calculateInventoryDelta(parsed, itemSkus);
+  }
+
+  const liveStoreData = await prisma.inventory.findMany({ where: { storeId } });
+  await redis.setex(cacheKey, 60, JSON.stringify(liveStoreData));
+  return liveStoreData;
+}`,
+    demoUrl: "https://github.com/sujalwarke28/ReOm.Co",
+    githubUrl: "https://github.com/sujalwarke28/ReOm.Co",
   },
 ];
 
@@ -399,10 +383,9 @@ export const terminalCommands = {
   • Backend: Node.js, Express, Go gRPC, Redis Streams, PostgreSQL, GraphQL, Kafka
   • DevOps: Docker Containers, Kubernetes K8s, GitHub Actions CI/CD, AWS, Linux Admin`,
 
-  projects: `[FEATURED SOFTWARE SYSTEMS]
-  1. NexusCloud - Distributed Task & Event Engine (Go, Redis, Kubernetes)
-  2. Synthetix AI - Code Review & AST Security Agent (TypeScript, Python, OpenAI)
-  3. HyperCanvas - 60FPS Real-Time Collaboration Canvas (React, WebGL, WebSockets)`,
+  projects: `[FEATURED REPOSITORIES]
+  1. Titanminds Factory Management System (https://github.com/sujalwarke28/Titanminds-Factory-Management-System)
+  2. ReOm.Co: Retail Operations Management System (https://github.com/sujalwarke28/ReOm.Co)`,
 
   experience: `[EXPERIENCE & IMPACT]
   • Senior Software Engineer | Distributed Systems & Web (2022 - Present)
