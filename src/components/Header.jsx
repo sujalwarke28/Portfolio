@@ -31,6 +31,7 @@ export default function Header({ onOpenCommandPalette, isMuted, setIsMuted, acti
     { name: 'Hero', href: '#hero' },
     { name: 'Skill Galaxy', href: '#skills' },
     { name: 'Engineer Life', href: '#engineer-life' },
+    { name: 'Resume', href: '#resume' },
     { name: 'Projects', href: '#projects' },
     { name: 'Git Activity', href: '#git-activity' },
     { name: 'Terminal', href: '#terminal' },

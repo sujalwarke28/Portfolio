@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import SkillsGalaxy from './components/SkillsGalaxy';
 import SoftwareGuyLife from './components/SoftwareGuyLife';
+import ResumeSection from './components/ResumeSection';
 import Projects from './components/Projects';
 import GitActivity from './components/GitActivity';
 import TerminalShell from './components/TerminalShell';
@@ -57,6 +58,7 @@ export default function App() {
         <Hero />
         <SkillsGalaxy />
         <SoftwareGuyLife />
+        <ResumeSection />
         <Projects />
         <GitActivity />
         <TerminalShell />

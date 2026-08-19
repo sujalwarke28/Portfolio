@@ -10,7 +10,8 @@ import {
   Code2, 
   ChevronDown,
   Layers,
-  Activity
+  Activity,
+  FileText
 } from 'lucide-react';
 import { personalInfo, metricsHUD } from '../data/portfolioData';
 import { sound } from '../utils/sound';
@@ -220,6 +221,15 @@ export default function Hero() {
             >
               <Layers className="w-4 h-4 text-purple-400" />
               <span>Software Guy Workflow</span>
+            </button>
+
+            <button
+              onClick={() => handleNavToSection('resume')}
+              onMouseEnter={() => sound.playHover()}
+              className="px-5 py-3.5 rounded-xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 hover:text-white hover:bg-cyan-900/60 font-semibold text-sm transition-all flex items-center gap-2 group backdrop-blur-md shadow-lg"
+            >
+              <FileText className="w-4 h-4 text-cyan-400" />
+              <span>Resume & Credentials</span>
             </button>
 
             <button

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Command, Globe, Layers, FolderGit2, Terminal, Mail, Sliders, Volume2, VolumeX, X } from 'lucide-react';
+import { Search, Command, Globe, Layers, FolderGit2, Terminal, Mail, Sliders, Volume2, VolumeX, X, FileText } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted }) {
@@ -30,6 +30,7 @@ export default function CommandPalette({ isOpen, onClose, isMuted, setIsMuted })
     { label: 'Jump to Hero Header', icon: Globe, action: () => scrollToSection('#hero') },
     { label: 'Jump to Skill Galaxy', icon: Sliders, action: () => scrollToSection('#skills') },
     { label: 'Jump to Software Guy Workflow', icon: Layers, action: () => scrollToSection('#engineer-life') },
+    { label: 'Jump to Resume & Credentials', icon: FileText, action: () => scrollToSection('#resume') },
     { label: 'Jump to Projects Showcase', icon: FolderGit2, action: () => scrollToSection('#projects') },
     { label: 'Jump to Terminal CLI Shell', icon: Terminal, action: () => scrollToSection('#terminal') },
     { label: 'Jump to Contact & Hire', icon: Mail, action: () => scrollToSection('#contact') },

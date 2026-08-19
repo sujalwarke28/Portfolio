@@ -1,17 +1,81 @@
 export const personalInfo = {
-  name: "Sujal Warke",
-  handle: "sujalwarke",
-  role: "Full-Stack Architect & Software Systems Engineer",
-  tagline: "Building high-throughput web applications, distributed cloud microservices, and AI-driven interactive experiences.",
-  location: "Silicon Valley / Remote",
-  status: "Available for High-Impact Roles & Consulting",
-  availability: "🟢 Active for Full-Time / Lead Contracts",
-  experienceYears: 4,
-  coffeeConverted: "1,450+ Liters",
+  name: "Sujal Pradeep Warke",
+  handle: "sujalwarke28",
+  role: "B.Tech Computer Science Engineer | Full-Stack & Machine Learning",
+  tagline: "Building high-performance web applications, Machine Learning models, and industrial IoT management systems.",
+  location: "Thane, Mumbai, Maharashtra, India",
+  status: "Available for Software Engineering Internships & Projects",
+  availability: "🟢 Active for Full-Stack & ML Roles",
+  experienceYears: 1,
+  gpa: "9.16",
   commitsThisYear: "3,482",
   uptime: "99.99%",
   avgLatency: "14ms",
-  bio: "Passionate software engineer focused on robust software design, low-latency API architecture, beautiful user interfaces, and automated cloud deployments. I bridge the gap between high-level UI elegance and low-level system efficiency.",
+  bio: "I aspire to be a successful Engineer doing my Undergraduate at ITM Skills University. My interests include Machine Learning, Deep Learning, Web Development, and Quantum Computing.",
+};
+
+export const resumeData = {
+  fullName: "Sujal Pradeep Warke",
+  roleTitle: "B.Tech Computer Science Engineering Student",
+  phone: "+91 8169613561",
+  primaryEmail: "warke.sujal281106@gmail.com",
+  eduEmail: "2024.sujalw@isu.ac.in",
+  location: "Thane, Mumbai, Maharashtra, India",
+  linkedin: "linkedin.com/in/sujalwarke",
+  github: "github.com/sujalwarke28",
+  
+  aboutMe: "I aspire to be a successful Engineer doing my Undergraduate at ITM Skills University. My interests include Machine Learning, Deep Learning, Web Development, and Quantum Computing. I communicate formally with high precision and clarity.",
+  
+  skills: [
+    "Web Development (React, Next.js, Node.js)",
+    "Python for Machine Learning & Deep Learning",
+    "AI Prompting & LLM Engineering",
+    "IoT & Factory Systems Architecture",
+    "Inter-Personal Communication"
+  ],
+
+  education: [
+    {
+      period: "2024 - Present",
+      institution: "ITM SKILLS UNIVERSITY, KHARGHAR",
+      degree: "B.Tech Computer Science Engineering",
+      grade: "1st Year GPA: 9.16 / 10.0"
+    },
+    {
+      period: "2022 - 2024",
+      institution: "PACE IIT SCIENCE JUNIOR COLLEGE, THANE",
+      degree: "Junior College (HSC Science)",
+      grade: "Score: 72%"
+    }
+  ],
+
+  experience: [
+    {
+      period: "Dec 2024 - Jan 2025",
+      role: "MARKETING ASSOCIATE INTERN",
+      company: "LetsUpgrade",
+      description: "Managed tech community outreach, growth campaigns, and developer workshop promotion."
+    },
+    {
+      period: "Oct 2024 - Dec 2024",
+      role: "OPEN SOURCE CONTRIBUTOR",
+      company: "Girlscript Summer of Code (GSSoC)",
+      description: "Contributed code fixes, feature additions, and documentation improvements across open-source software repositories."
+    }
+  ],
+
+  achievements: [
+    {
+      date: "Aug 2024",
+      title: "AUTOMATION CHALLENGE WINNER (NMIMS)",
+      details: "Conveyor System Identification and Optimization — Built automated hardware telemetry and speed optimization algorithms."
+    },
+    {
+      date: "July 2024",
+      title: "HSC BOARDS ELECTRICAL MAINTENANCE TOPPER",
+      details: "Achieved Perfect 200/200 score in Electrical Maintenance HSC Board Examination."
+    }
+  ]
 };
 
 export const metricsHUD = [
