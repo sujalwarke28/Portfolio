@@ -115,15 +115,32 @@ export default function Projects() {
                   <ExternalLink className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                 </button>
 
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  onMouseEnter={() => sound.playHover()}
-                  className="p-2 rounded-lg bg-slate-900 text-slate-300 hover:text-white hover:border-cyan-500/40 border border-slate-800"
-                >
-                  <Github className="w-4 h-4" />
-                </a>
+                <div className="flex items-center gap-2">
+                  {project.demoUrl && (
+                    <a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onMouseEnter={() => sound.playHover()}
+                      className="px-2.5 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 text-xs font-mono font-semibold flex items-center gap-1 transition-all"
+                      title="Open Live Backend Demo"
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Live Demo</span>
+                    </a>
+                  )}
+
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onMouseEnter={() => sound.playHover()}
+                    className="p-2 rounded-lg bg-slate-900 text-slate-300 hover:text-white hover:border-cyan-500/40 border border-slate-800"
+                    title="View GitHub Code"
+                  >
+                    <Github className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
             </div>
           ))}
@@ -178,7 +195,18 @@ export default function Projects() {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+            <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-slate-800">
+              {selectedProject.demoUrl && (
+                <a
+                  href={selectedProject.demoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 text-xs font-semibold flex items-center gap-2"
+                >
+                  <Zap className="w-4 h-4 text-cyan-400" /> Launch Live Demo
+                </a>
+              )}
+
               <a
                 href={selectedProject.githubUrl}
                 target="_blank"

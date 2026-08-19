@@ -301,13 +301,13 @@ export const incidentDashboardData = {
 export const featuredProjects = [
   {
     id: "titanminds-factory",
-    title: "Titanminds Factory Management System",
-    category: "Industrial Systems & ERP",
-    description: "Comprehensive industrial factory management system built for real-time inventory tracking, production line scheduling, machine telemetry monitoring, and automated maintenance dispatch.",
+    title: "Titanminds: IoT Based Factory Management System",
+    category: "IoT & Industrial Systems",
+    description: "Comprehensive IoT-based industrial factory management system built for real-time telemetry monitoring, machine health sensors, production scheduling, and automated maintenance alert dispatch.",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "Node.js", "Express", "PostgreSQL", "Tailwind CSS", "REST API"],
+    tags: ["IoT Telemetry", "React", "Node.js", "Express", "PostgreSQL", "Tailwind CSS"],
     metrics: { efficiency: "+34%", uptime: "99.9%", latency: "18ms" },
-    architecture: "React Frontend → NGINX Reverse Proxy → Node.js Express API → PostgreSQL Database Cluster",
+    architecture: "IoT Sensors → Express Backend (Render) → PostgreSQL Cluster → React Dashboard",
     codeSnippet: `// Factory Machine Telemetry & Maintenance Queue Dispatcher
 export async function scheduleMachineMaintenance(machineId, telemetryData) {
   if (telemetryData.temperature > 85.0 || telemetryData.vibrationIndex > 7.5) {
@@ -319,7 +319,7 @@ export async function scheduleMachineMaintenance(machineId, telemetryData) {
     return ticket.rows[0];
   }
 }`,
-    demoUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
+    demoUrl: "https://titanminds-backend.onrender.com/",
     githubUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
   },
   {
