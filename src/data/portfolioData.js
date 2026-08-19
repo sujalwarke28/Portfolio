@@ -319,7 +319,7 @@ export async function scheduleMachineMaintenance(machineId, telemetryData) {
     return ticket.rows[0];
   }
 }`,
-    demoUrl: "https://titanminds-backend.onrender.com/",
+    demoUrl: "https://titanminds.vercel.app/",
     githubUrl: "https://github.com/sujalwarke28/Titanminds-Factory-Management-System",
   },
   {
